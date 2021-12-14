@@ -1,5 +1,6 @@
 #pragma once
 #include "MyForm1.h"
+#include "states.h"
 #include <string>
 #include <iostream>
 #include <sstream>
@@ -192,10 +193,9 @@ namespace eight_puzzle {
 			this->Controls->Add(this->start_button);
 			this->Name = L"MyForm";
 			this->Text = L"Control GUI";
+			this->Load += gcnew System::EventHandler(this, &MyForm::MyForm_Load);
 			this->ResumeLayout(false);
 			this->PerformLayout();
-
-
 
 		}
 #pragma endregion
@@ -227,6 +227,9 @@ namespace eight_puzzle {
 			DataList[i] = (gcnew System::Windows::Forms::ListViewItem(str2));
 		}
 		visual->changeItems(DataList);
+		find_solution_bfs(RandomList);
 	};
-	};
+	private: System::Void MyForm_Load(System::Object^  sender, System::EventArgs^  e) {
+	}
+};
 }
