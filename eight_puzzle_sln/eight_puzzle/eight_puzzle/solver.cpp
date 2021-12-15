@@ -3,8 +3,8 @@
 
 std::vector<Node*> successors(Node* configuration)
 {
-	std::vector<std::vector<int>> parentConfiguration = configuration->getState(configuration);
-	std::vector<int> blankPosition= configuration->getBlankPosition(configuration);
+	std::vector<std::vector<int>> parentConfiguration = configuration->getState();
+	std::vector<int> blankPosition= configuration->getBlankPosition();
 	int size = parentConfiguration.size();
 	std::vector<Node*> successors_list;
 	if (blankPosition.at(0) == 0)
@@ -33,7 +33,7 @@ std::vector<Node*> successors(Node* configuration)
 	{
 		if(blankPosition.at(0) == size - 1)
 		{
-			successors_list.push_back(moveLeft(configuration));
+			successors_list.push_back(moveRight(configuration));
 			successors_list.push_back(moveUp(configuration));
 			//move left and up
 		}
@@ -82,48 +82,48 @@ std::vector<Node*> successors(Node* configuration)
 Node* moveLeft(Node* configuration)
 {
 	std::vector<int> blankPosition;
-	blankPosition = configuration->getBlankPosition(configuration);
-	std::vector<std::vector<int>> state = configuration->getState(configuration);
+	blankPosition = configuration->getBlankPosition();
+	std::vector<std::vector<int>> state = configuration->getState();
 	state[blankPosition.at(0)][blankPosition.at(1)] = state.at(blankPosition.at(0) + 1).at(blankPosition.at(1));
 	state[blankPosition.at(0) + 1][blankPosition.at(1)] = 0;
 	Node* resultNode = new Node(configuration, state, 0);
-	resultNode->setBlankPosition(resultNode, blankPosition.at(0) + 1, blankPosition.at(1));
+	resultNode->setBlankPosition(blankPosition.at(0) + 1, blankPosition.at(1));
 	return resultNode;
 }
 
 Node* moveRight(Node* configuration)
 {
 	std::vector<int> blankPosition;
-	blankPosition = configuration->getBlankPosition(configuration);
-	std::vector<std::vector<int>> state = configuration->getState(configuration);
+	blankPosition = configuration->getBlankPosition();
+	std::vector<std::vector<int>> state = configuration->getState();
 	state[blankPosition.at(0)][blankPosition.at(1)] = state.at(blankPosition.at(0) - 1).at(blankPosition.at(1));
 	state[blankPosition.at(0) - 1][blankPosition.at(1)] = 0;
 	Node* resultNode = new Node(configuration, state, 0);
-	resultNode->setBlankPosition(resultNode, blankPosition.at(0) - 1, blankPosition.at(1));
+	resultNode->setBlankPosition(blankPosition.at(0) - 1, blankPosition.at(1));
 	return resultNode;
 }
 
 Node* moveUp(Node* configuration)
 {
 	std::vector<int> blankPosition;
-	blankPosition = configuration->getBlankPosition(configuration);
-	std::vector<std::vector<int>> state = configuration->getState(configuration);
+	blankPosition = configuration->getBlankPosition();
+	std::vector<std::vector<int>> state = configuration->getState();
 	state[blankPosition.at(0)][blankPosition.at(1)] = state.at(blankPosition.at(0)).at(blankPosition.at(1) + 1);
 	state[blankPosition.at(0)][blankPosition.at(1) + 1] = 0;
 	Node* resultNode = new Node(configuration, state, 0);
-	resultNode->setBlankPosition(resultNode, blankPosition.at(0), blankPosition.at(1) - 1);
+	resultNode->setBlankPosition(blankPosition.at(0), blankPosition.at(1) + 1);
 	return resultNode;
 }
 
 Node* moveDown(Node* configuration)
 {
 	std::vector<int> blankPosition;
-	blankPosition = configuration->getBlankPosition(configuration);
-	std::vector<std::vector<int>> state = configuration->getState(configuration);
+	blankPosition = configuration->getBlankPosition();
+	std::vector<std::vector<int>> state = configuration->getState();
 	state[blankPosition.at(0)][blankPosition.at(1)] = state.at(blankPosition.at(0)).at(blankPosition.at(1) - 1);
 	state[blankPosition.at(0)][blankPosition.at(1) - 1] = 0;
 	Node* resultNode = new Node(configuration, state, 0);
-	resultNode->setBlankPosition(resultNode, blankPosition.at(0), blankPosition.at(1) + 1);
+	resultNode->setBlankPosition(blankPosition.at(0), blankPosition.at(1) - 1);
 	return resultNode;
 }
 
@@ -148,7 +148,7 @@ void find_solution_bfs(std::vector<int> initialPosition)
 	}
 
 	Node* initialNode = new Node(NULL, initialConfiguration, 0);
-	initialNode->setBlankPosition(initialNode, blank_x, blank_y);
+	initialNode->setBlankPosition(blank_x, blank_y);
 
 	std::vector<std::vector<int>> goalConfiguration(size, std::vector<int>(size, 0));
 	for (int i = 0; i < size; i++)
@@ -164,18 +164,35 @@ void find_solution_bfs(std::vector<int> initialPosition)
 	std::vector<Node*> queue;
 	queue.push_back(initialNode);
 	Node* result = NULL;
+	std::vector<std::vector<std::vector<int>>> labeled_states;
+	bool duplicate = false;
 
 	while (true)
 	{
 		std::vector<Node*> successors_list = successors(queue.at(0));
-		if (queue.at(0)->getState(queue.at(0)) == goalConfiguration)
+		exploredNodes++;
+
+		labeled_states.push_back(queue.at(0)->getState());
+
+		if (queue.at(0)->getState() == goalConfiguration)
 		{
 			result = queue.at(0);
+			break;
 		}
 		queue.erase(queue.begin());
+		
 		for (int i = 0; i < successors_list.size(); i++)
 		{
-			queue.push_back(successors_list.at(i));
+			duplicate = false;
+			for (int j = 0; j < labeled_states.size(); j++)
+			{
+				if (labeled_states.at(j) == successors_list.at(i)->getState())
+				{
+					duplicate = true;
+				}
+			}
+			if (!duplicate)
+				queue.push_back(successors_list.at(i));
 		}
 	}
 

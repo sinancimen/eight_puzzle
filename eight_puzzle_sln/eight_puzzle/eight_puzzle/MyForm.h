@@ -29,9 +29,6 @@ namespace eight_puzzle {
 			//
 			//TODO: Add the constructor code here
 			//
-
-
-			visual->Show();
 		}
 
 	protected:
@@ -214,7 +211,8 @@ namespace eight_puzzle {
 		{
 			RandomList.push_back(i);
 		}
-		std::random_shuffle(std::begin(RandomList), std::end(RandomList));
+		//std::random_shuffle(std::begin(RandomList), std::end(RandomList));
+		RandomList = { 2,8,3,1,6,4,7,0,5 };
 		for (int i = 0; i < size_squared; i++)
 		{
 			int random_value = RandomList.at(i);
@@ -227,6 +225,7 @@ namespace eight_puzzle {
 			DataList[i] = (gcnew System::Windows::Forms::ListViewItem(str2));
 		}
 		visual->changeItems(DataList);
+		visual->Show();
 		find_solution_bfs(RandomList);
 	};
 	private: System::Void MyForm_Load(System::Object^  sender, System::EventArgs^  e) {

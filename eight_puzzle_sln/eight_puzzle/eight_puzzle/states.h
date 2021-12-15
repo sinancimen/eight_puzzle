@@ -20,21 +20,23 @@ public:
 	}
 
 	int get_manhattan_distance();
-	Node* get_parent();
-	void print_node();
-	
-	std::vector<std::vector<int>> getState(Node* node)
+	Node* get_parent()
 	{
-		return node->state;
-	};
-	void setBlankPosition(Node* node, int x, int y)
-	{
-		node->blank_x = x;
-		node->blank_y = y;
+		return this->parent;
 	}
-	std::vector<int> getBlankPosition(Node* node)
+	
+	std::vector<std::vector<int>> getState()
 	{
-		std::vector<int> pos = { blank_x, blank_y };
+		return this->state;
+	};
+	void setBlankPosition(int x, int y)
+	{
+		this->blank_x = x;
+		this->blank_y = y;
+	}
+	std::vector<int> getBlankPosition()
+	{
+		std::vector<int> pos = { this->blank_x, this->blank_y };
 		return pos;
 	}
 };
