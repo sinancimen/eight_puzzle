@@ -196,6 +196,7 @@ std::vector<std::vector<std::vector<int>>> find_solution_bfs(std::vector<int> in
 		std::string str = std::to_string(exploredNodes);
 		System::String^ str2 = gcnew System::String(str.c_str());
 		solver_window->setNodesExploreText(str2);
+		solver_window->Refresh();
 
 		labeled_states.push_back(queue.at(0)->getState());
 
@@ -251,12 +252,20 @@ std::vector<std::vector<std::vector<int>>> find_solution_dfs(std::vector<int> in
 	Node* result = NULL;
 	std::vector<std::vector<std::vector<int>>> labeled_states;
 	bool duplicate = false;
+	System::String^ solving_str = "SOLVING";
+	System::String^ failed_str = "FAILED";
+	System::String^ success_str = "SUCCESS";
+	eight_puzzle::MyForm2^ solver_window = gcnew eight_puzzle::MyForm2();
+	solver_window->Show();
+	solver_window->setSolverStatusText(solving_str);
+	clock_t begin = clock();
 
 	while (true)
 	{
 		if (queue.size() == 0)
 		{
 			result = initialNode;
+			solver_window->setSolverStatusText(failed_str);
 			break;
 		}
 		else
@@ -264,11 +273,17 @@ std::vector<std::vector<std::vector<int>>> find_solution_dfs(std::vector<int> in
 			std::vector<Node*> successors_list = successors(queue.at(queue.size() - 1));
 			exploredNodes++;
 
+			std::string str = std::to_string(exploredNodes);
+			System::String^ str2 = gcnew System::String(str.c_str());
+			solver_window->setNodesExploreText(str2);
+			solver_window->Refresh();
+
 			labeled_states.push_back(queue.at(queue.size() - 1)->getState());
 
 			if (queue.at(0)->getState() == goalConfiguration)
 			{
 				result = queue.at(queue.size() - 1);
+				solver_window->setSolverStatusText(success_str);
 				break;
 			}
 			queue.pop_back();
@@ -288,6 +303,12 @@ std::vector<std::vector<std::vector<int>>> find_solution_dfs(std::vector<int> in
 			}
 		}
 	}
+
+	clock_t end = clock();
+	double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+	std::string str3 = std::to_string(elapsed_secs);
+	System::String^ str4 = gcnew System::String(str3.c_str());
+	solver_window->setTimePassedText(str4);
 
 	std::vector<std::vector<std::vector<int>>> resultSequence;
 	resultSequence.push_back(result->getState());
