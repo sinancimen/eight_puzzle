@@ -1,5 +1,7 @@
 #include "states.h"
 #include <math.h>
+#include <ctime>
+
 
 std::vector<Node*> successors(Node* configuration)
 {
@@ -128,7 +130,7 @@ Node* moveDown(Node* configuration)
 }
 
 
-std::vector<std::vector<std::vector<int>>> find_solution_bfs(std::vector<int> initialPosition)
+Node* generateInitialNode(std::vector<int> initialPosition)
 {
 	int size = sqrt(initialPosition.size());
 	std::vector<std::vector<int>> initialConfiguration(size, std::vector<int>(size, 0));
@@ -150,6 +152,11 @@ std::vector<std::vector<std::vector<int>>> find_solution_bfs(std::vector<int> in
 	Node* initialNode = new Node(NULL, initialConfiguration, 0);
 	initialNode->setBlankPosition(blank_x, blank_y);
 
+	return initialNode;
+}
+
+std::vector<std::vector<int>> generateGoalConfig(int size)
+{
 	std::vector<std::vector<int>> goalConfiguration(size, std::vector<int>(size, 0));
 	for (int i = 0; i < size; i++)
 	{
@@ -158,25 +165,44 @@ std::vector<std::vector<std::vector<int>>> find_solution_bfs(std::vector<int> in
 			goalConfiguration[i][j] = size*i + j + 1;
 		}
 	}
-	goalConfiguration[size-1][size-1] = 0;
+	goalConfiguration[size - 1][size - 1] = 0;
+	return goalConfiguration;
+}
 
+std::vector<std::vector<std::vector<int>>> find_solution_bfs(std::vector<int> initialPosition)
+{
+	int size = sqrt(initialPosition.size());
+	Node* initialNode = generateInitialNode(initialPosition);
+	std::vector<std::vector<int>> goalConfiguration = generateGoalConfig(size);
 	int exploredNodes = 0;
 	std::vector<Node*> queue;
 	queue.push_back(initialNode);
 	Node* result = NULL;
 	std::vector<std::vector<std::vector<int>>> labeled_states;
 	bool duplicate = false;
+	System::String^ solving_str = "SOLVING";
+	System::String^ failed_str = "FAILED";
+	System::String^ success_str = "SUCCESS";
+	eight_puzzle::MyForm2^ solver_window = gcnew eight_puzzle::MyForm2();
+	solver_window->Show();
+	solver_window->setSolverStatusText(solving_str);
+	clock_t begin = clock();
 
 	while (true)
 	{
 		std::vector<Node*> successors_list = successors(queue.at(0));
 		exploredNodes++;
 
+		std::string str = std::to_string(exploredNodes);
+		System::String^ str2 = gcnew System::String(str.c_str());
+		solver_window->setNodesExploreText(str2);
+
 		labeled_states.push_back(queue.at(0)->getState());
 
 		if (queue.at(0)->getState() == goalConfiguration)
 		{
 			result = queue.at(0);
+			solver_window->setSolverStatusText(success_str);
 			break;
 		}
 		queue.erase(queue.begin());
@@ -193,6 +219,73 @@ std::vector<std::vector<std::vector<int>>> find_solution_bfs(std::vector<int> in
 			}
 			if (!duplicate)
 				queue.push_back(successors_list.at(i));
+		}
+	}
+
+	clock_t end = clock();
+	double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+	std::string str3 = std::to_string(elapsed_secs);
+	System::String^ str4 = gcnew System::String(str3.c_str());
+	solver_window->setTimePassedText(str4);
+
+	std::vector<std::vector<std::vector<int>>> resultSequence;
+	resultSequence.push_back(result->getState());
+	Node* parentNode = result->get_parent();
+	while (parentNode != NULL)
+	{
+		resultSequence.insert(resultSequence.begin(), parentNode->getState());
+		parentNode = parentNode->get_parent();
+	}
+
+	return resultSequence;
+}
+
+std::vector<std::vector<std::vector<int>>> find_solution_dfs(std::vector<int> initialPosition)
+{
+	int size = sqrt(initialPosition.size());
+	Node* initialNode = generateInitialNode(initialPosition);
+	std::vector<std::vector<int>> goalConfiguration = generateGoalConfig(size);
+	int exploredNodes = 0;
+	std::vector<Node*> queue;
+	queue.push_back(initialNode);
+	Node* result = NULL;
+	std::vector<std::vector<std::vector<int>>> labeled_states;
+	bool duplicate = false;
+
+	while (true)
+	{
+		if (queue.size() == 0)
+		{
+			result = initialNode;
+			break;
+		}
+		else
+		{
+			std::vector<Node*> successors_list = successors(queue.at(queue.size() - 1));
+			exploredNodes++;
+
+			labeled_states.push_back(queue.at(queue.size() - 1)->getState());
+
+			if (queue.at(0)->getState() == goalConfiguration)
+			{
+				result = queue.at(queue.size() - 1);
+				break;
+			}
+			queue.pop_back();
+
+			for (unsigned int i = 0; i < successors_list.size(); i++)
+			{
+				duplicate = false;
+				for (unsigned int j = 0; j < labeled_states.size(); j++)
+				{
+					if (labeled_states.at(j) == successors_list.at(i)->getState())
+					{
+						duplicate = true;
+					}
+				}
+				if (!duplicate)
+					queue.push_back(successors_list.at(i));
+			}
 		}
 	}
 

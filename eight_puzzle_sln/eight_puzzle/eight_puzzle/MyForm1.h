@@ -76,6 +76,7 @@ namespace eight_puzzle {
 			this->listView1->Size = System::Drawing::Size(121, 97);
 			this->listView1->TabIndex = 0;
 			this->listView1->UseCompatibleStateImageBehavior = false;
+			this->listView1->SelectedIndexChanged += gcnew System::EventHandler(this, &MyForm1::listView1_SelectedIndexChanged);
 			// 
 			// MyForm1
 			// 
@@ -91,6 +92,8 @@ namespace eight_puzzle {
 		}
 #pragma endregion
 	private: System::Void MyForm1_Load(System::Object^  sender, System::EventArgs^  e) {
+	}
+	private: System::Void listView1_SelectedIndexChanged(System::Object^  sender, System::EventArgs^  e) {
 	}
 	};
 

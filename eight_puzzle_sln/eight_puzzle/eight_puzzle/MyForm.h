@@ -8,6 +8,7 @@
 #include <vector>
 #include <random>
 
+
 namespace eight_puzzle {
 
 	using namespace System;
@@ -68,6 +69,10 @@ namespace eight_puzzle {
 		/// </summary>
 		System::ComponentModel::Container ^components;
 	private: System::Windows::Forms::Button^  solve_button;
+	private: System::Windows::Forms::TextBox^  initial_state_info_static;
+	private: System::Windows::Forms::TextBox^  step_number_textbox_static;
+	private: System::Windows::Forms::TextBox^  initial_state_textbox;
+
 			 MyForm1^ visual = gcnew MyForm1();
 
 #pragma region Windows Form Designer generated code
@@ -88,11 +93,14 @@ namespace eight_puzzle {
 			this->size_textbox_static = (gcnew System::Windows::Forms::TextBox());
 			this->size_textbox_input = (gcnew System::Windows::Forms::TextBox());
 			this->solve_button = (gcnew System::Windows::Forms::Button());
+			this->initial_state_info_static = (gcnew System::Windows::Forms::TextBox());
+			this->step_number_textbox_static = (gcnew System::Windows::Forms::TextBox());
+			this->initial_state_textbox = (gcnew System::Windows::Forms::TextBox());
 			this->SuspendLayout();
 			// 
 			// start_button
 			// 
-			this->start_button->Location = System::Drawing::Point(12, 110);
+			this->start_button->Location = System::Drawing::Point(22, 248);
 			this->start_button->Name = L"start_button";
 			this->start_button->Size = System::Drawing::Size(75, 23);
 			this->start_button->TabIndex = 1;
@@ -101,7 +109,7 @@ namespace eight_puzzle {
 			// 
 			// pause_button
 			// 
-			this->pause_button->Location = System::Drawing::Point(93, 108);
+			this->pause_button->Location = System::Drawing::Point(118, 248);
 			this->pause_button->Name = L"pause_button";
 			this->pause_button->Size = System::Drawing::Size(75, 23);
 			this->pause_button->TabIndex = 2;
@@ -110,7 +118,7 @@ namespace eight_puzzle {
 			// 
 			// cancel_button
 			// 
-			this->cancel_button->Location = System::Drawing::Point(174, 108);
+			this->cancel_button->Location = System::Drawing::Point(207, 248);
 			this->cancel_button->Name = L"cancel_button";
 			this->cancel_button->Size = System::Drawing::Size(75, 23);
 			this->cancel_button->TabIndex = 3;
@@ -119,17 +127,18 @@ namespace eight_puzzle {
 			// 
 			// iteration_number_textbox
 			// 
-			this->iteration_number_textbox->Location = System::Drawing::Point(12, 139);
+			this->iteration_number_textbox->BorderStyle = System::Windows::Forms::BorderStyle::None;
+			this->iteration_number_textbox->Location = System::Drawing::Point(101, 299);
 			this->iteration_number_textbox->Name = L"iteration_number_textbox";
 			this->iteration_number_textbox->ReadOnly = true;
-			this->iteration_number_textbox->Size = System::Drawing::Size(100, 20);
+			this->iteration_number_textbox->Size = System::Drawing::Size(41, 13);
 			this->iteration_number_textbox->TabIndex = 4;
 			this->iteration_number_textbox->Text = L"0";
 			// 
 			// search_method_list
 			// 
 			this->search_method_list->FormattingEnabled = true;
-			this->search_method_list->Items->AddRange(gcnew cli::array< System::Object^  >(3) { L"BFS", L"DFS", L"A*" });
+			this->search_method_list->Items->AddRange(gcnew cli::array< System::Object^  >(4) { L"BFS", L"DFS", L"ID", L"A*" });
 			this->search_method_list->Location = System::Drawing::Point(118, 11);
 			this->search_method_list->Name = L"search_method_list";
 			this->search_method_list->Size = System::Drawing::Size(121, 21);
@@ -137,7 +146,7 @@ namespace eight_puzzle {
 			// 
 			// iterate_button
 			// 
-			this->iterate_button->Location = System::Drawing::Point(127, 137);
+			this->iterate_button->Location = System::Drawing::Point(167, 294);
 			this->iterate_button->Name = L"iterate_button";
 			this->iterate_button->Size = System::Drawing::Size(112, 23);
 			this->iterate_button->TabIndex = 6;
@@ -147,9 +156,9 @@ namespace eight_puzzle {
 			// 
 			// generate_button
 			// 
-			this->generate_button->Location = System::Drawing::Point(12, 165);
+			this->generate_button->Location = System::Drawing::Point(31, 330);
 			this->generate_button->Name = L"generate_button";
-			this->generate_button->Size = System::Drawing::Size(115, 23);
+			this->generate_button->Size = System::Drawing::Size(125, 23);
 			this->generate_button->TabIndex = 7;
 			this->generate_button->Text = L"Generate Puzzle";
 			this->generate_button->UseVisualStyleBackColor = true;
@@ -157,19 +166,21 @@ namespace eight_puzzle {
 			// 
 			// method_textbox_static
 			// 
+			this->method_textbox_static->BorderStyle = System::Windows::Forms::BorderStyle::None;
 			this->method_textbox_static->Location = System::Drawing::Point(31, 11);
 			this->method_textbox_static->Name = L"method_textbox_static";
 			this->method_textbox_static->ReadOnly = true;
-			this->method_textbox_static->Size = System::Drawing::Size(56, 20);
+			this->method_textbox_static->Size = System::Drawing::Size(56, 13);
 			this->method_textbox_static->TabIndex = 8;
 			this->method_textbox_static->Text = L"Method:";
 			// 
 			// size_textbox_static
 			// 
+			this->size_textbox_static->BorderStyle = System::Windows::Forms::BorderStyle::None;
 			this->size_textbox_static->Location = System::Drawing::Point(31, 55);
 			this->size_textbox_static->Name = L"size_textbox_static";
 			this->size_textbox_static->ReadOnly = true;
-			this->size_textbox_static->Size = System::Drawing::Size(54, 20);
+			this->size_textbox_static->Size = System::Drawing::Size(54, 13);
 			this->size_textbox_static->TabIndex = 9;
 			this->size_textbox_static->Text = L"Size:";
 			// 
@@ -182,7 +193,7 @@ namespace eight_puzzle {
 			// 
 			// solve_button
 			// 
-			this->solve_button->Location = System::Drawing::Point(133, 165);
+			this->solve_button->Location = System::Drawing::Point(207, 330);
 			this->solve_button->Name = L"solve_button";
 			this->solve_button->Size = System::Drawing::Size(106, 23);
 			this->solve_button->TabIndex = 11;
@@ -190,11 +201,45 @@ namespace eight_puzzle {
 			this->solve_button->UseVisualStyleBackColor = true;
 			this->solve_button->Click += gcnew System::EventHandler(this, &MyForm::solve_Click);
 			// 
+			// initial_state_info_static
+			// 
+			this->initial_state_info_static->BorderStyle = System::Windows::Forms::BorderStyle::None;
+			this->initial_state_info_static->Location = System::Drawing::Point(3, 81);
+			this->initial_state_info_static->Multiline = true;
+			this->initial_state_info_static->Name = L"initial_state_info_static";
+			this->initial_state_info_static->ReadOnly = true;
+			this->initial_state_info_static->Size = System::Drawing::Size(198, 78);
+			this->initial_state_info_static->TabIndex = 12;
+			this->initial_state_info_static->Text = L"Initial State (integers without any comma and space. sequence should be row by ro"
+				L"w. Use zero for the empty cell. If you want to create random puzzle, leave empty"
+				L".)";
+			this->initial_state_info_static->TextChanged += gcnew System::EventHandler(this, &MyForm::textBox1_TextChanged_1);
+			// 
+			// step_number_textbox_static
+			// 
+			this->step_number_textbox_static->BorderStyle = System::Windows::Forms::BorderStyle::None;
+			this->step_number_textbox_static->Location = System::Drawing::Point(12, 299);
+			this->step_number_textbox_static->Name = L"step_number_textbox_static";
+			this->step_number_textbox_static->ReadOnly = true;
+			this->step_number_textbox_static->Size = System::Drawing::Size(73, 13);
+			this->step_number_textbox_static->TabIndex = 13;
+			this->step_number_textbox_static->Text = L"Step Number:";
+			// 
+			// initial_state_textbox
+			// 
+			this->initial_state_textbox->Location = System::Drawing::Point(207, 99);
+			this->initial_state_textbox->Name = L"initial_state_textbox";
+			this->initial_state_textbox->Size = System::Drawing::Size(133, 20);
+			this->initial_state_textbox->TabIndex = 14;
+			// 
 			// MyForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(256, 200);
+			this->ClientSize = System::Drawing::Size(367, 365);
+			this->Controls->Add(this->initial_state_textbox);
+			this->Controls->Add(this->step_number_textbox_static);
+			this->Controls->Add(this->initial_state_info_static);
 			this->Controls->Add(this->solve_button);
 			this->Controls->Add(this->size_textbox_input);
 			this->Controls->Add(this->size_textbox_static);
@@ -220,25 +265,51 @@ namespace eight_puzzle {
 
 		System::Void generate_Click(System::Object^  sender, System::EventArgs^  e) 
 		{
-		System::String^ size_string = this->size_textbox_input->Text;
-		int size_int = int::Parse(size_string);
-		int size_squared = size_int * size_int;
-		visual->changeSize(size_int);
-
 		list_to_be_solved.clear();
-		for (int i = 0; i < size_squared; i++)
+		if (initial_state_textbox->Text->Length == 0)
 		{
-			list_to_be_solved.push_back(i);
+			System::String^ size_string = this->size_textbox_input->Text;
+			int size_int = int::Parse(size_string);
+			int size_squared = size_int * size_int;
+			visual->changeSize(size_int);
+			for (int i = 0; i < size_squared; i++)
+			{
+				list_to_be_solved.push_back(i);
+			}
+			std::random_shuffle(std::begin(list_to_be_solved), std::end(list_to_be_solved));
+			//list_to_be_solved = { 3, 4, 6, 1, 0, 8, 7, 2, 5 };
+			show_on_grid_1d(list_to_be_solved);
+			iteration_number = 0;
 		}
-		//std::random_shuffle(std::begin(list_to_be_solved), std::end(list_to_be_solved));
-		list_to_be_solved = { 3,4,6,1,0,8,7,2,5 };
-		show_on_grid_1d(list_to_be_solved);
-		iteration_number = 0;
+		else
+		{
+			System::String^ str = gcnew String(initial_state_textbox->Text);
+			IntPtr ptrToNativeString = System::Runtime::InteropServices::Marshal::StringToHGlobalAnsi(str);
+			char* chrArr = static_cast<char*>(ptrToNativeString.ToPointer());
+
+			std::vector<int> stateList;
+			for (int i = 0; i < str->Length; i++)
+			{
+				stateList.push_back(int(chrArr[i]) - 48);
+			}
+			int size = sqrt(stateList.size());
+			visual->changeSize(size);
+			list_to_be_solved = stateList;
+			show_on_grid_1d(list_to_be_solved);
+		}
 	}
 
 	System::Void solve_Click(System::Object^  sender, System::EventArgs^  e) {
 
-		result_sequence = find_solution_bfs(list_to_be_solved);
+		if (search_method_list->GetItemText(search_method_list->SelectedItem) == ("BFS"))
+		{
+			result_sequence = find_solution_bfs(list_to_be_solved);
+		}
+		else if (search_method_list->GetItemText(search_method_list->SelectedItem) == ("DFS"))
+		{
+			result_sequence = find_solution_dfs(list_to_be_solved);
+		}
+		
 	}
 
 	System::Void iterate_Click(System::Object^  sender, System::EventArgs^  e) {
@@ -286,5 +357,7 @@ namespace eight_puzzle {
 		visual->Show();
 	};
 
+private: System::Void textBox1_TextChanged_1(System::Object^  sender, System::EventArgs^  e) {
+}
 };
 }
