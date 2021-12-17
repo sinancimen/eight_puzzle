@@ -1,18 +1,17 @@
-﻿Build started 15/12/2021 16:20:57.
-     1>Project "C:\Users\sinan.cimen\Desktop\repos\eight_puzzle\eight_puzzle_sln\eight_puzzle\eight_puzzle\eight_puzzle.vcxproj" on node 2 (Build target(s)).
+﻿Build started 17.12.2021 19:55:54.
+     1>Project "C:\Users\cimbo\Desktop\repos\eight_puzzle\eight_puzzle_sln\eight_puzzle\eight_puzzle\eight_puzzle.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\VS13\VC\bin\CL.exe /c /AI"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\\" /AI"C:\Program Files (x86)\Windows Kits\8.1\References\CommonConfiguration\Neutral" /AI"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\Facades\\" /Zi /clr /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _UNICODE /D UNICODE /EHa /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /TP /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\mscorlib.dll" /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\System.Data.dll" /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\System.dll" /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\System.Drawing.dll" /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\System.Windows.Forms.dll" /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\System.Xml.dll" /analyze- /errorReport:prompt /clr:nostdlib solver.cpp
-         solver.cpp
-     1>solver.cpp(133): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
-     1>solver.cpp(185): warning C4018: '<' : signed/unsigned mismatch
-     1>solver.cpp(188): warning C4018: '<' : signed/unsigned mismatch
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /AI"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\\" /AI"C:\Program Files (x86)\Windows Kits\8.1\References\CommonConfiguration\Neutral" /AI"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\Facades\\" /Zi /clr /nologo /W3 /WX- /Od /Oy- /D "WIN32" /D _DEBUG /D "_UNICODE" /D "UNICODE" /EHa /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /TP /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\mscorlib.dll" /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\System.Data.dll" /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\System.dll" /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\System.Drawing.dll" /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\System.Windows.Forms.dll" /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\System.Xml.dll" /analyze- /errorReport:prompt /clr:nostdlib MyForm.cpp
+         MyForm.cpp
+     1>c:\users\cimbo\desktop\repos\eight_puzzle\eight_puzzle_sln\eight_puzzle\eight_puzzle\MyForm.h(253): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\cimbo\desktop\repos\eight_puzzle\eight_puzzle_sln\eight_puzzle\eight_puzzle\MyForm.h(255): warning C4018: '<' : signed/unsigned mismatch
        Link:
-         C:\VS13\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\sinan.cimen\Desktop\repos\eight_puzzle\eight_puzzle_sln\eight_puzzle\Debug\eight_puzzle.exe" /INCREMENTAL /NOLOGO /ASSEMBLYRESOURCE:Debug\eight_puzzle.MyForm.resources /ASSEMBLYRESOURCE:Debug\eight_puzzle.MyForm1.resources /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\sinan.cimen\Desktop\repos\eight_puzzle\eight_puzzle_sln\eight_puzzle\Debug\eight_puzzle.pdb" /ASSEMBLYDEBUG /SUBSYSTEM:WINDOWS /TLBID:1 /ENTRY:"Main" /DYNAMICBASE /FIXED:NO /NXCOMPAT /MACHINE:X86 Debug\MyForm.obj
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\cimbo\Desktop\repos\eight_puzzle\eight_puzzle_sln\eight_puzzle\Debug\eight_puzzle.exe" /INCREMENTAL /NOLOGO /ASSEMBLYRESOURCE:Debug\eight_puzzle.MyForm.resources /ASSEMBLYRESOURCE:Debug\eight_puzzle.MyForm1.resources /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\cimbo\Desktop\repos\eight_puzzle\eight_puzzle_sln\eight_puzzle\Debug\eight_puzzle.pdb" /ASSEMBLYDEBUG /SUBSYSTEM:WINDOWS /TLBID:1 /ENTRY:"Main" /DYNAMICBASE /FIXED:NO /NXCOMPAT /MACHINE:X86 Debug\MyForm.obj
          Debug\solver.obj
          "Debug\.NETFramework,Version=v4.5.AssemblyAttributes.obj"
-         eight_puzzle.vcxproj -> C:\Users\sinan.cimen\Desktop\repos\eight_puzzle\eight_puzzle_sln\eight_puzzle\Debug\eight_puzzle.exe
-     1>Done Building Project "C:\Users\sinan.cimen\Desktop\repos\eight_puzzle\eight_puzzle_sln\eight_puzzle\eight_puzzle\eight_puzzle.vcxproj" (Build target(s)).
+         eight_puzzle.vcxproj -> C:\Users\cimbo\Desktop\repos\eight_puzzle\eight_puzzle_sln\eight_puzzle\Debug\eight_puzzle.exe
+     1>Done Building Project "C:\Users\cimbo\Desktop\repos\eight_puzzle\eight_puzzle_sln\eight_puzzle\eight_puzzle\eight_puzzle.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:01.53
+Time Elapsed 00:00:01.96

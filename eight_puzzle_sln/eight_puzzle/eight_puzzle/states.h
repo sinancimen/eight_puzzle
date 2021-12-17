@@ -2,6 +2,7 @@
 #include <vector>
 #include <iostream>
 
+
 class Node {
 	Node* parent;
 	std::vector< std::vector<int> > state;
@@ -41,7 +42,7 @@ public:
 	}
 };
 
-void find_solution_bfs(std::vector<int> initialPosition);
+std::vector<std::vector<std::vector<int>>> find_solution_bfs(std::vector<int> initialPosition);
 std::vector<Node*> successors(Node* node);
 Node* moveLeft(Node* node);
 Node* moveRight(Node* node);

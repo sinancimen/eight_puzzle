@@ -128,7 +128,7 @@ Node* moveDown(Node* configuration)
 }
 
 
-void find_solution_bfs(std::vector<int> initialPosition)
+std::vector<std::vector<std::vector<int>>> find_solution_bfs(std::vector<int> initialPosition)
 {
 	int size = sqrt(initialPosition.size());
 	std::vector<std::vector<int>> initialConfiguration(size, std::vector<int>(size, 0));
@@ -181,10 +181,10 @@ void find_solution_bfs(std::vector<int> initialPosition)
 		}
 		queue.erase(queue.begin());
 		
-		for (int i = 0; i < successors_list.size(); i++)
+		for (unsigned int i = 0; i < successors_list.size(); i++)
 		{
 			duplicate = false;
-			for (int j = 0; j < labeled_states.size(); j++)
+			for (unsigned int j = 0; j < labeled_states.size(); j++)
 			{
 				if (labeled_states.at(j) == successors_list.at(i)->getState())
 				{
@@ -196,4 +196,14 @@ void find_solution_bfs(std::vector<int> initialPosition)
 		}
 	}
 
+	std::vector<std::vector<std::vector<int>>> resultSequence;
+	resultSequence.push_back(result->getState());
+	Node* parentNode = result->get_parent();
+	while (parentNode != NULL)
+	{
+		resultSequence.insert(resultSequence.begin(), parentNode->getState());
+		parentNode = parentNode->get_parent();
+	}
+
+	return resultSequence;
 }

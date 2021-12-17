@@ -16,6 +16,9 @@ namespace eight_puzzle {
 	using namespace System::Windows::Forms;
 	using namespace System::Data;
 	using namespace System::Drawing;
+	std::vector<int> list_to_be_solved;
+	std::vector<std::vector<std::vector<int>>> result_sequence;
+	int iteration_number;
 
 	/// <summary>
 	/// Summary for MyForm
@@ -64,7 +67,8 @@ namespace eight_puzzle {
 		/// Required designer variable.
 		/// </summary>
 		System::ComponentModel::Container ^components;
-		MyForm1^ visual = gcnew MyForm1();
+	private: System::Windows::Forms::Button^  solve_button;
+			 MyForm1^ visual = gcnew MyForm1();
 
 #pragma region Windows Form Designer generated code
 		/// <summary>
@@ -83,6 +87,7 @@ namespace eight_puzzle {
 			this->method_textbox_static = (gcnew System::Windows::Forms::TextBox());
 			this->size_textbox_static = (gcnew System::Windows::Forms::TextBox());
 			this->size_textbox_input = (gcnew System::Windows::Forms::TextBox());
+			this->solve_button = (gcnew System::Windows::Forms::Button());
 			this->SuspendLayout();
 			// 
 			// start_button
@@ -119,6 +124,7 @@ namespace eight_puzzle {
 			this->iteration_number_textbox->ReadOnly = true;
 			this->iteration_number_textbox->Size = System::Drawing::Size(100, 20);
 			this->iteration_number_textbox->TabIndex = 4;
+			this->iteration_number_textbox->Text = L"0";
 			// 
 			// search_method_list
 			// 
@@ -137,10 +143,11 @@ namespace eight_puzzle {
 			this->iterate_button->TabIndex = 6;
 			this->iterate_button->Text = L"Iterate";
 			this->iterate_button->UseVisualStyleBackColor = true;
+			this->iterate_button->Click += gcnew System::EventHandler(this, &MyForm::iterate_Click);
 			// 
 			// generate_button
 			// 
-			this->generate_button->Location = System::Drawing::Point(76, 165);
+			this->generate_button->Location = System::Drawing::Point(12, 165);
 			this->generate_button->Name = L"generate_button";
 			this->generate_button->Size = System::Drawing::Size(115, 23);
 			this->generate_button->TabIndex = 7;
@@ -173,11 +180,22 @@ namespace eight_puzzle {
 			this->size_textbox_input->Size = System::Drawing::Size(100, 20);
 			this->size_textbox_input->TabIndex = 10;
 			// 
+			// solve_button
+			// 
+			this->solve_button->Location = System::Drawing::Point(133, 165);
+			this->solve_button->Name = L"solve_button";
+			this->solve_button->Size = System::Drawing::Size(106, 23);
+			this->solve_button->TabIndex = 11;
+			this->solve_button->Text = L"Solve!";
+			this->solve_button->UseVisualStyleBackColor = true;
+			this->solve_button->Click += gcnew System::EventHandler(this, &MyForm::solve_Click);
+			// 
 			// MyForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(256, 200);
+			this->Controls->Add(this->solve_button);
 			this->Controls->Add(this->size_textbox_input);
 			this->Controls->Add(this->size_textbox_static);
 			this->Controls->Add(this->method_textbox_static);
@@ -190,7 +208,6 @@ namespace eight_puzzle {
 			this->Controls->Add(this->start_button);
 			this->Name = L"MyForm";
 			this->Text = L"Control GUI";
-			this->Load += gcnew System::EventHandler(this, &MyForm::MyForm_Load);
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
@@ -198,24 +215,65 @@ namespace eight_puzzle {
 #pragma endregion
 	private: System::Void textBox1_TextChanged(System::Object^  sender, System::EventArgs^  e) {
 	}
-	private: System::Void generate_Click(System::Object^  sender, System::EventArgs^  e) {
+	private: 
 
+
+		System::Void generate_Click(System::Object^  sender, System::EventArgs^  e) 
+		{
 		System::String^ size_string = this->size_textbox_input->Text;
 		int size_int = int::Parse(size_string);
 		int size_squared = size_int * size_int;
 		visual->changeSize(size_int);
 
-		array<System::Windows::Forms::ListViewItem^>^ DataList = gcnew array< System::Windows::Forms::ListViewItem^>(size_squared);
-		std::vector<int> RandomList;
+		list_to_be_solved.clear();
 		for (int i = 0; i < size_squared; i++)
 		{
-			RandomList.push_back(i);
+			list_to_be_solved.push_back(i);
 		}
-		//std::random_shuffle(std::begin(RandomList), std::end(RandomList));
-		RandomList = { 2,8,3,1,6,4,7,0,5 };
+		//std::random_shuffle(std::begin(list_to_be_solved), std::end(list_to_be_solved));
+		list_to_be_solved = { 3,4,6,1,0,8,7,2,5 };
+		show_on_grid_1d(list_to_be_solved);
+		iteration_number = 0;
+	}
+
+	System::Void solve_Click(System::Object^  sender, System::EventArgs^  e) {
+
+		result_sequence = find_solution_bfs(list_to_be_solved);
+	}
+
+	System::Void iterate_Click(System::Object^  sender, System::EventArgs^  e) {
+
+		if (result_sequence.size() == 0)
+		{
+		}
+		else
+		{
+			std::vector<std::vector<int>> list_to_show_2d = result_sequence.at(0);
+			std::vector<int> list_to_show_1d;
+			result_sequence.erase(result_sequence.begin());
+			for (int i = 0; i < list_to_show_2d.size(); i++)
+			{
+				for (int j = 0; j < list_to_show_2d.size(); j++)
+				{
+					list_to_show_1d.push_back(list_to_show_2d.at(i).at(j));
+				}
+			}
+			show_on_grid_1d(list_to_show_1d);
+			iteration_number += 1;
+			std::string iteration_number_str = std::to_string(iteration_number);
+			System::String^ iteration_number_sstr = gcnew String(iteration_number_str.c_str());
+			iteration_number_textbox->Text = iteration_number_sstr;
+		}
+		
+	}
+
+	System::Void show_on_grid_1d(std::vector<int> List)
+	{
+		int size_squared = List.size();
+		array<System::Windows::Forms::ListViewItem^>^ DataList = gcnew array< System::Windows::Forms::ListViewItem^>(size_squared);
 		for (int i = 0; i < size_squared; i++)
 		{
-			int random_value = RandomList.at(i);
+			int random_value = List.at(i);
 			std::string str;
 			if (random_value == 0)
 				str = "";
@@ -226,9 +284,7 @@ namespace eight_puzzle {
 		}
 		visual->changeItems(DataList);
 		visual->Show();
-		find_solution_bfs(RandomList);
 	};
-	private: System::Void MyForm_Load(System::Object^  sender, System::EventArgs^  e) {
-	}
+
 };
 }
