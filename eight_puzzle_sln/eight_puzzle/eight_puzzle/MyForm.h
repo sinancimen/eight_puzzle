@@ -145,7 +145,10 @@ namespace eight_puzzle {
 			// search_method_list
 			// 
 			this->search_method_list->FormattingEnabled = true;
-			this->search_method_list->Items->AddRange(gcnew cli::array< System::Object^  >(4) { L"BFS", L"DFS", L"ID", L"A*" });
+			this->search_method_list->Items->AddRange(gcnew cli::array< System::Object^  >(5) {
+				L"BFS", L"DFS", L"ID", L"A*Manhattan",
+					L"A*Misplaced"
+			});
 			this->search_method_list->Location = System::Drawing::Point(118, 11);
 			this->search_method_list->Name = L"search_method_list";
 			this->search_method_list->Size = System::Drawing::Size(121, 21);
@@ -325,6 +328,10 @@ namespace eight_puzzle {
 		else if (search_method_list->GetItemText(search_method_list->SelectedItem) == ("ID"))
 		{
 			result_sequence = find_solution_id(list_to_be_solved);
+		}
+		else if (search_method_list->GetItemText(search_method_list->SelectedItem) == ("A*Manhattan"))
+		{
+			result_sequence = find_solution_astar_manhattan(list_to_be_solved);
 		}
 		
 	}
