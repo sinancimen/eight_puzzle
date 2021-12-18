@@ -20,6 +20,7 @@ namespace eight_puzzle {
 	std::vector<int> list_to_be_solved;
 	std::vector<std::vector<std::vector<int>>> result_sequence;
 	int iteration_number;
+	bool executionActive;
 
 	/// <summary>
 	/// Summary for MyForm
@@ -57,6 +58,7 @@ namespace eight_puzzle {
 	private: System::Windows::Forms::TextBox^  method_textbox_static;
 	private: System::Windows::Forms::TextBox^  size_textbox_static;
 	private: System::Windows::Forms::TextBox^  size_textbox_input;
+	private: System::ComponentModel::IContainer^  components;
 
 
 
@@ -67,11 +69,12 @@ namespace eight_puzzle {
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
-		System::ComponentModel::Container ^components;
+
 	private: System::Windows::Forms::Button^  solve_button;
 	private: System::Windows::Forms::TextBox^  initial_state_info_static;
 	private: System::Windows::Forms::TextBox^  step_number_textbox_static;
 	private: System::Windows::Forms::TextBox^  initial_state_textbox;
+	private: System::Windows::Forms::Timer^  timer1;
 
 			 MyForm1^ visual = gcnew MyForm1();
 
@@ -82,6 +85,7 @@ namespace eight_puzzle {
 		/// </summary>
 		void InitializeComponent(void)
 		{
+			this->components = (gcnew System::ComponentModel::Container());
 			this->start_button = (gcnew System::Windows::Forms::Button());
 			this->pause_button = (gcnew System::Windows::Forms::Button());
 			this->cancel_button = (gcnew System::Windows::Forms::Button());
@@ -96,6 +100,7 @@ namespace eight_puzzle {
 			this->initial_state_info_static = (gcnew System::Windows::Forms::TextBox());
 			this->step_number_textbox_static = (gcnew System::Windows::Forms::TextBox());
 			this->initial_state_textbox = (gcnew System::Windows::Forms::TextBox());
+			this->timer1 = (gcnew System::Windows::Forms::Timer(this->components));
 			this->SuspendLayout();
 			// 
 			// start_button
@@ -106,6 +111,7 @@ namespace eight_puzzle {
 			this->start_button->TabIndex = 1;
 			this->start_button->Text = L"Start";
 			this->start_button->UseVisualStyleBackColor = true;
+			this->start_button->Click += gcnew System::EventHandler(this, &MyForm::start_click);
 			// 
 			// pause_button
 			// 
@@ -115,6 +121,7 @@ namespace eight_puzzle {
 			this->pause_button->TabIndex = 2;
 			this->pause_button->Text = L"Pause";
 			this->pause_button->UseVisualStyleBackColor = true;
+			this->pause_button->Click += gcnew System::EventHandler(this, &MyForm::pause_click);
 			// 
 			// cancel_button
 			// 
@@ -232,6 +239,12 @@ namespace eight_puzzle {
 			this->initial_state_textbox->Size = System::Drawing::Size(133, 20);
 			this->initial_state_textbox->TabIndex = 14;
 			// 
+			// timer1
+			// 
+			this->timer1->Enabled = true;
+			this->timer1->Interval = 1000;
+			this->timer1->Tick += gcnew System::EventHandler(this, &MyForm::timer_execution);
+			// 
 			// MyForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
@@ -313,7 +326,11 @@ namespace eight_puzzle {
 	}
 
 	System::Void iterate_Click(System::Object^  sender, System::EventArgs^  e) {
+		iterate();
+	}
 
+	void iterate()
+	{
 		if (result_sequence.size() == 0)
 		{
 		}
@@ -335,7 +352,25 @@ namespace eight_puzzle {
 			System::String^ iteration_number_sstr = gcnew String(iteration_number_str.c_str());
 			iteration_number_textbox->Text = iteration_number_sstr;
 		}
-		
+	}
+
+	System::Void timer_execution(System::Object^  sender, System::EventArgs^  e) {
+		if (executionActive)
+		{
+			iterate();
+		}
+		else
+		{
+
+		}
+	}
+
+	System::Void start_click(System::Object^  sender, System::EventArgs^  e) {
+		executionActive = true;
+	}
+
+	System::Void pause_click(System::Object^  sender, System::EventArgs^  e) {
+		executionActive = false;
 	}
 
 	System::Void show_on_grid_1d(std::vector<int> List)
