@@ -13,15 +13,22 @@ class Node {
 	int misplaced_tiles;
 	int blank_x;
 	int blank_y;
+	int stepsTaken = 0;
 
 public:
-	Node() {}
+	Node() {
+		
+	}
 	Node(Node* parent,
 		const std::vector< std::vector<int> >&state,
 		int manhattan_distance) {
 		this->parent = parent;
 		this->state = state;
 		this->manhattan_distance = manhattan_distance;
+		if (this->parent != NULL)
+		{
+			this->stepsTaken = this->parent->stepsTaken + 1;
+		}
 	}
 
 	int get_manhattan_distance();
@@ -64,12 +71,18 @@ public:
 	{
 		return this->misplaced_tiles;
 	}
+
+	int getStepsTaken()
+	{
+		return this->stepsTaken;
+	}
 };
 
 std::vector<std::vector<std::vector<int>>> find_solution_bfs(std::vector<int> initialPosition);
 std::vector<std::vector<std::vector<int>>> find_solution_dfs(std::vector<int> initialPosition);
 std::vector<std::vector<std::vector<int>>> find_solution_id(std::vector<int> initialPosition);
 std::vector<std::vector<std::vector<int>>> find_solution_astar_manhattan(std::vector<int> initialPosition);
+std::vector<std::vector<std::vector<int>>> find_solution_astar_misplaced(std::vector<int> initialPosition);
 std::vector<std::vector<int>> generateGoalConfig(int size);
 Node* generateInitialNode(std::vector<int> initialPosition);
 std::vector<Node*> successors(Node* node);

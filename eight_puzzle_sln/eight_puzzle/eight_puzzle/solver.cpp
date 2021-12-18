@@ -430,6 +430,7 @@ void calculateManhattanDistance(Node* node)
 			manhattan_distance += abs((int)(number_on_state / size) - (int)((3 * i + j + 1) / size)) + abs((int)(number_on_state % size) - (int)((3 * i + j + 1) % size));
 		}
 	}
+	manhattan_distance += node->getStepsTaken();
 	node->setManhattanDistance(manhattan_distance);
 }
 
@@ -441,10 +442,11 @@ void calculateMisplacedTiles(Node* node)
 	{
 		for (int j = 0; j < state.size(); j++)
 		{
-			if (state.at(i).at(j) == 3 * i + j)
+			if (state.at(i).at(j) != 3 * i + j + 1)
 				misplaced_tiles++;
 		}
 	}
+	misplaced_tiles += node->getStepsTaken();
 	node->setMisplacedTiles(misplaced_tiles);
 }
 
@@ -452,6 +454,13 @@ struct CompareManhattanDistance {
 	bool operator()(Node* const& n1, Node* const& n2)
 	{
 		return n1->getManhattanDistance() > n2->getManhattanDistance();
+	}
+};
+
+struct CompareMisplacedTiles {
+	bool operator()(Node* const& n1, Node* const& n2)
+	{
+		return n1->getMisplacedTiles() > n2->getMisplacedTiles();
 	}
 };
 
@@ -510,6 +519,84 @@ std::vector<std::vector<std::vector<int>>> find_solution_astar_manhattan(std::ve
 			{
 				Node* temp_node = successors_list.at(i);
 				calculateManhattanDistance(temp_node);
+				queue.push(successors_list.at(i));
+			}
+		}
+	}
+
+	clock_t end = clock();
+	double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+	std::string str3 = std::to_string(elapsed_secs);
+	System::String^ str4 = gcnew System::String(str3.c_str());
+	solver_window->setTimePassedText(str4);
+
+	std::vector<std::vector<std::vector<int>>> resultSequence;
+	resultSequence.push_back(result->getState());
+	Node* parentNode = result->get_parent();
+	while (parentNode != NULL)
+	{
+		resultSequence.insert(resultSequence.begin(), parentNode->getState());
+		parentNode = parentNode->get_parent();
+	}
+
+	return resultSequence;
+}
+
+std::vector<std::vector<std::vector<int>>> find_solution_astar_misplaced(std::vector<int> initialPosition)
+{
+	int size = sqrt(initialPosition.size());
+	Node* initialNode = generateInitialNode(initialPosition);
+	std::vector<std::vector<int>> goalConfiguration = generateGoalConfig(size);
+	int exploredNodes = 0;
+	std::priority_queue<int, std::vector<Node*>, CompareMisplacedTiles> queue;
+	calculateMisplacedTiles(initialNode);
+	queue.push(initialNode);
+	Node* result = NULL;
+	std::vector<std::vector<std::vector<int>>> labeled_states;
+	bool duplicate = false;
+	System::String^ solving_str = "SOLVING";
+	System::String^ failed_str = "FAILED";
+	System::String^ success_str = "SUCCESS";
+	eight_puzzle::MyForm2^ solver_window = gcnew eight_puzzle::MyForm2();
+	solver_window->Show();
+	solver_window->setSolverStatusText(solving_str);
+	clock_t begin = clock();
+
+	while (true)
+	{
+		std::vector<Node*> successors_list = successors(queue.top());
+		exploredNodes++;
+
+		std::string str = std::to_string(exploredNodes);
+		System::String^ str2 = gcnew System::String(str.c_str());
+		solver_window->setNodesExploreText(str2);
+		solver_window->Refresh();
+
+		Node* node_temp = queue.top();
+		labeled_states.push_back(queue.top()->getState());
+
+		if (queue.top()->getState() == goalConfiguration)
+		{
+			result = queue.top();
+			solver_window->setSolverStatusText(success_str);
+			break;
+		}
+		queue.pop();
+
+		for (unsigned int i = 0; i < successors_list.size(); i++)
+		{
+			duplicate = false;
+			for (unsigned int j = 0; j < labeled_states.size(); j++)
+			{
+				if (labeled_states.at(j) == successors_list.at(i)->getState())
+				{
+					duplicate = true;
+				}
+			}
+			if (!duplicate)
+			{
+				Node* temp_node = successors_list.at(i);
+				calculateMisplacedTiles(temp_node);
 				queue.push(successors_list.at(i));
 			}
 		}

@@ -312,6 +312,7 @@ namespace eight_puzzle {
 			visual->changeSize(size);
 			list_to_be_solved = stateList;
 			show_on_grid_1d(list_to_be_solved);
+			iteration_number = 0;
 		}
 	}
 
@@ -332,6 +333,10 @@ namespace eight_puzzle {
 		else if (search_method_list->GetItemText(search_method_list->SelectedItem) == ("A*Manhattan"))
 		{
 			result_sequence = find_solution_astar_manhattan(list_to_be_solved);
+		}
+		else if (search_method_list->GetItemText(search_method_list->SelectedItem) == ("A*Misplaced"))
+		{
+			result_sequence = find_solution_astar_misplaced(list_to_be_solved);
 		}
 		
 	}
