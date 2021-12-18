@@ -321,3 +321,94 @@ std::vector<std::vector<std::vector<int>>> find_solution_dfs(std::vector<int> in
 
 	return resultSequence;
 }
+
+std::vector<std::vector<std::vector<int>>> find_solution_id(std::vector<int> initialPosition)
+{
+	int size = sqrt(initialPosition.size());
+	Node* initialNode = generateInitialNode(initialPosition);
+	std::vector<std::vector<int>> goalConfiguration = generateGoalConfig(size);
+	int exploredNodes = 0;
+	std::vector<Node*> queue;
+	queue.push_back(initialNode);
+	Node* result = NULL;
+	std::vector<std::vector<std::vector<int>>> labeled_states;
+	bool duplicate = false;
+	System::String^ solving_str = "SOLVING";
+	System::String^ failed_str = "FAILED";
+	System::String^ success_str = "SUCCESS";
+	eight_puzzle::MyForm2^ solver_window = gcnew eight_puzzle::MyForm2();
+	solver_window->Show();
+	solver_window->setSolverStatusText(solving_str);
+	clock_t begin = clock();
+	std::vector<Node*> successors_list;
+	bool success = false;
+
+	while (true)
+	{
+		if (queue.size() == 0)
+		{
+			result = initialNode;
+			solver_window->setSolverStatusText(failed_str);
+			break;
+		}
+		else
+		{
+			for (unsigned int k = 0; k < queue.size(); k++)
+			{
+				std::vector<Node*> successors_temporary = successors(queue.at(k));
+				for (unsigned n = 0; n < successors_temporary.size(); n++)
+				{
+					duplicate = false;
+					for (unsigned int j = 0; j < labeled_states.size(); j++)
+					{
+						if (labeled_states.at(j) == successors_temporary.at(n)->getState())
+						{
+							duplicate = true;
+						}
+					}
+					if (!duplicate)
+						successors_list.push_back(successors_temporary.at(n));		
+				}
+				exploredNodes++;
+
+				std::string str = std::to_string(exploredNodes);
+				System::String^ str2 = gcnew System::String(str.c_str());
+				solver_window->setNodesExploreText(str2);
+				solver_window->Refresh();
+
+				labeled_states.push_back(queue.at(k)->getState());
+
+				if (queue.at(k)->getState() == goalConfiguration)
+				{
+					result = queue.at(k);
+					solver_window->setSolverStatusText(success_str);
+					success = true;
+					break;
+				}
+			}
+			queue = successors_list;
+			successors_list.clear();
+			if (success)
+			{
+				break;
+			}
+		}
+	}
+
+	clock_t end = clock();
+	double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+	std::string str3 = std::to_string(elapsed_secs);
+	System::String^ str4 = gcnew System::String(str3.c_str());
+	solver_window->setTimePassedText(str4);
+
+	std::vector<std::vector<std::vector<int>>> resultSequence;
+	resultSequence.push_back(result->getState());
+	Node* parentNode = result->get_parent();
+	while (parentNode != NULL)
+	{
+		resultSequence.insert(resultSequence.begin(), parentNode->getState());
+		parentNode = parentNode->get_parent();
+	}
+
+	return resultSequence;
+}

@@ -322,6 +322,10 @@ namespace eight_puzzle {
 		{
 			result_sequence = find_solution_dfs(list_to_be_solved);
 		}
+		else if (search_method_list->GetItemText(search_method_list->SelectedItem) == ("ID"))
+		{
+			result_sequence = find_solution_id(list_to_be_solved);
+		}
 		
 	}
 

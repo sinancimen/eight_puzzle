@@ -47,6 +47,7 @@ public:
 
 std::vector<std::vector<std::vector<int>>> find_solution_bfs(std::vector<int> initialPosition);
 std::vector<std::vector<std::vector<int>>> find_solution_dfs(std::vector<int> initialPosition);
+std::vector<std::vector<std::vector<int>>> find_solution_id(std::vector<int> initialPosition);
 std::vector<std::vector<int>> generateGoalConfig(int size);
 Node* generateInitialNode(std::vector<int> initialPosition);
 std::vector<Node*> successors(Node* node);
