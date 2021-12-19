@@ -333,7 +333,6 @@ std::vector<std::vector<std::vector<int>>> find_solution_id(std::vector<int> ini
 	std::vector<Node*> queue;
 	queue.push_back(initialNode);
 	Node* result = NULL;
-	std::vector<std::vector<std::vector<int>>> labeled_states;
 	bool duplicate = false;
 	System::String^ solving_str = "SOLVING";
 	System::String^ failed_str = "FAILED";
@@ -343,58 +342,48 @@ std::vector<std::vector<std::vector<int>>> find_solution_id(std::vector<int> ini
 	solver_window->setSolverStatusText(solving_str);
 	clock_t begin = clock();
 	std::vector<Node*> successors_list;
+	std::vector<Node*> depth_list;
 	bool success = false;
+	int depth = 1;
 
 	while (true)
 	{
-		if (queue.size() == 0)
+		for (unsigned int i = 0; i < depth; i++)
 		{
-			result = initialNode;
-			solver_window->setSolverStatusText(failed_str);
-			break;
-		}
-		else
-		{
-			for (unsigned int k = 0; k < queue.size(); k++)
+			for (unsigned int j = 0; j < queue.size(); j++)
 			{
-				std::vector<Node*> successors_temporary = successors(queue.at(k));
-				for (unsigned n = 0; n < successors_temporary.size(); n++)
+				successors_list = successors(queue.at(j));
+				for (unsigned int n = 0; n < successors_list.size(); n++)
 				{
-					duplicate = false;
-					for (unsigned int j = 0; j < labeled_states.size(); j++)
-					{
-						if (labeled_states.at(j) == successors_temporary.at(n)->getState())
-						{
-							duplicate = true;
-						}
-					}
-					if (!duplicate)
-						successors_list.push_back(successors_temporary.at(n));		
-				}
-				exploredNodes++;
-
-				std::string str = std::to_string(exploredNodes);
-				System::String^ str2 = gcnew System::String(str.c_str());
-				solver_window->setNodesExploreText(str2);
-				solver_window->Refresh();
-
-				labeled_states.push_back(queue.at(k)->getState());
-
-				if (queue.at(k)->getState() == goalConfiguration)
-				{
-					result = queue.at(k);
-					solver_window->setSolverStatusText(success_str);
-					success = true;
-					break;
+					depth_list.push_back(successors_list.at(n));
 				}
 			}
-			queue = successors_list;
-			successors_list.clear();
-			if (success)
+			queue = depth_list;
+			depth_list.clear();
+		}
+		for (unsigned int k = 0; k < queue.size(); k++)
+		{
+			exploredNodes++;
+
+			std::string str = std::to_string(exploredNodes);
+			System::String^ str2 = gcnew System::String(str.c_str());
+			solver_window->setNodesExploreText(str2);
+			solver_window->Refresh();
+
+			if (queue.at(k)->getState() == goalConfiguration)
 			{
+				result = queue.at(k);
+				solver_window->setSolverStatusText(success_str);
+				success = true;
 				break;
 			}
+			
 		}
+		if (success)
+		{
+			break;
+		}
+		depth++;
 	}
 
 	clock_t end = clock();
