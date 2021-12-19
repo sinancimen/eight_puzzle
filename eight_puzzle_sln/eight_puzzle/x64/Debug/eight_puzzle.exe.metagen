@@ -1,6 +1,7 @@
   eight_puzzle.MyForm.resources - Embedded, ContainedInManifestFile, 
   eight_puzzle.MyForm1.resources - Embedded, ContainedInManifestFile, 
   eight_puzzle.MyForm2.resources - Embedded, ContainedInManifestFile, 
+  eight_puzzle.MyForm3.resources - Embedded, ContainedInManifestFile, 
 ImageRuntimeVersion: v4.0.30319
 Assembly eight_puzzle, Version=0.0.*, Culture=Invariant Language (Invariant Country): 
 	hash=SHA1, flags=PublicKey
@@ -30,5 +31,8 @@ Class eight_puzzle.MyForm2: AutoLayout, AnsiClass, Class, Public, BeforeFieldIni
     setNodesExploreText(String): PrivateScope, Public, HideBySig
     setTimePassedText(String): PrivateScope, Public, HideBySig
 Class eight_puzzle.MyForm: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :System.Windows.Forms.Form
+    Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+Class eight_puzzle.MyForm3: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
   :System.Windows.Forms.Form
     Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName

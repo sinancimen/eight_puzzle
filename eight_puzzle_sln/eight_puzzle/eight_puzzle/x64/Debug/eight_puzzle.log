@@ -1,28 +1,31 @@
-﻿Build started 19.12.2021 00:21:21.
+﻿Build started 19.12.2021 22:21:28.
      1>Project "C:\Users\cimbo\Desktop\repos\eight_puzzle\eight_puzzle_sln\eight_puzzle\eight_puzzle\eight_puzzle.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /AI"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\\" /AI"C:\Program Files (x86)\Windows Kits\8.1\References\CommonConfiguration\Neutral" /AI"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\Facades\\" /Zi /clr /nologo /W3 /WX- /Od /D "WIN32" /D _DEBUG /D "_UNICODE" /D "UNICODE" /EHa /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"x64\Debug\\" /Fd"x64\Debug\vc120.pdb" /TP /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\mscorlib.dll" /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\System.Data.dll" /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\System.dll" /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\System.Drawing.dll" /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\System.Windows.Forms.dll" /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\System.Xml.dll" /errorReport:prompt /clr:nostdlib MyForm.cpp solver.cpp
-         MyForm.cpp
-     1>c:\users\cimbo\desktop\repos\eight_puzzle\eight_puzzle_sln\eight_puzzle\eight_puzzle\MyForm.h(311): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
-     1>c:\users\cimbo\desktop\repos\eight_puzzle\eight_puzzle_sln\eight_puzzle\eight_puzzle\MyForm.h(394): warning C4267: 'initializing' : conversion from 'size_t' to 'int', possible loss of data
-         solver.cpp
-     1>solver.cpp(12): warning C4267: 'initializing' : conversion from 'size_t' to 'int', possible loss of data
-     1>solver.cpp(137): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
-     1>solver.cpp(176): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
-     1>solver.cpp(248): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
-     1>solver.cpp(329): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
-     1>solver.cpp(421): warning C4267: 'initializing' : conversion from 'size_t' to 'int', possible loss of data
-     1>solver.cpp(469): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
-     1>solver.cpp(547): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
-         Generating Code...
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /AI"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\\" /AI"C:\Program Files (x86)\Windows Kits\8.1\References\CommonConfiguration\Neutral" /AI"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\Facades\\" /Zi /clr /nologo /W3 /WX- /Od /D "WIN32" /D _DEBUG /D "_UNICODE" /D "UNICODE" /EHa /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"x64\Debug\\" /Fd"x64\Debug\vc120.pdb" /TP /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\mscorlib.dll" /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\System.Data.dll" /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\System.dll" /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\System.Drawing.dll" /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\System.Windows.Forms.dll" /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\System.Xml.dll" /errorReport:prompt /clr:nostdlib monte_carlo_functions.cpp
+         monte_carlo_functions.cpp
+     1>monte_carlo_functions.cpp(11): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
+     1>monte_carlo_functions.cpp(51): warning C4267: 'initializing' : conversion from 'size_t' to 'int', possible loss of data
+     1>monte_carlo_functions.cpp(52): warning C4267: 'initializing' : conversion from 'size_t' to 'int', possible loss of data
+     1>monte_carlo_functions.cpp(61): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
+     1>monte_carlo_functions.cpp(108): warning C4267: 'initializing' : conversion from 'size_t' to 'int', possible loss of data
+     1>monte_carlo_functions.cpp(109): warning C4267: 'initializing' : conversion from 'size_t' to 'int', possible loss of data
+     1>monte_carlo_functions.cpp(119): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
+     1>monte_carlo_functions.cpp(136): warning C4018: '<' : signed/unsigned mismatch
+     1>monte_carlo_functions.cpp(168): warning C4267: 'initializing' : conversion from 'size_t' to 'int', possible loss of data
+     1>monte_carlo_functions.cpp(192): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
+     1>monte_carlo_functions.cpp(239): warning C4267: 'initializing' : conversion from 'size_t' to 'int', possible loss of data
+     1>monte_carlo_functions.cpp(249): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
+     1>monte_carlo_functions.cpp(296): warning C4267: 'initializing' : conversion from 'size_t' to 'int', possible loss of data
        Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\cimbo\Desktop\repos\eight_puzzle\eight_puzzle_sln\eight_puzzle\x64\Debug\eight_puzzle.exe" /INCREMENTAL /NOLOGO /ASSEMBLYRESOURCE:x64\Debug\eight_puzzle.MyForm.resources /ASSEMBLYRESOURCE:x64\Debug\eight_puzzle.MyForm1.resources /ASSEMBLYRESOURCE:x64\Debug\eight_puzzle.MyForm2.resources /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\cimbo\Desktop\repos\eight_puzzle\eight_puzzle_sln\eight_puzzle\x64\Debug\eight_puzzle.pdb" /ASSEMBLYDEBUG /SUBSYSTEM:WINDOWS /TLBID:1 /ENTRY:"Main" /DYNAMICBASE /FIXED:NO /NXCOMPAT /MACHINE:X64 x64\Debug\MyForm.obj
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\cimbo\Desktop\repos\eight_puzzle\eight_puzzle_sln\eight_puzzle\x64\Debug\eight_puzzle.exe" /INCREMENTAL /NOLOGO /ASSEMBLYRESOURCE:x64\Debug\eight_puzzle.MyForm.resources /ASSEMBLYRESOURCE:x64\Debug\eight_puzzle.MyForm1.resources /ASSEMBLYRESOURCE:x64\Debug\eight_puzzle.MyForm2.resources /ASSEMBLYRESOURCE:x64\Debug\eight_puzzle.MyForm3.resources /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\cimbo\Desktop\repos\eight_puzzle\eight_puzzle_sln\eight_puzzle\x64\Debug\eight_puzzle.pdb" /ASSEMBLYDEBUG /SUBSYSTEM:WINDOWS /TLBID:1 /ENTRY:"Main" /DYNAMICBASE /FIXED:NO /NXCOMPAT /MACHINE:X64 x64\Debug\MyForm.obj
          x64\Debug\MyForm2.obj
+         x64\Debug\MyForm3.obj
          x64\Debug\solver.obj
+         x64\Debug\monte_carlo_functions.obj
          "x64\Debug\.NETFramework,Version=v4.5.AssemblyAttributes.obj"
          eight_puzzle.vcxproj -> C:\Users\cimbo\Desktop\repos\eight_puzzle\eight_puzzle_sln\eight_puzzle\x64\Debug\eight_puzzle.exe
      1>Done Building Project "C:\Users\cimbo\Desktop\repos\eight_puzzle\eight_puzzle_sln\eight_puzzle\eight_puzzle\eight_puzzle.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:02.43
+Time Elapsed 00:00:01.82

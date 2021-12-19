@@ -83,6 +83,14 @@ std::vector<std::vector<std::vector<int>>> find_solution_dfs(std::vector<int> in
 std::vector<std::vector<std::vector<int>>> find_solution_id(std::vector<int> initialPosition);
 std::vector<std::vector<std::vector<int>>> find_solution_astar_manhattan(std::vector<int> initialPosition);
 std::vector<std::vector<std::vector<int>>> find_solution_astar_misplaced(std::vector<int> initialPosition);
+std::vector<int> find_solution_bfs_mc(std::vector<int> initialPosition);
+std::vector<int> find_solution_dfs_mc(std::vector<int> initialPosition);
+std::vector<int> find_solution_id_mc(std::vector<int> initialPosition);
+std::vector<int> find_solution_astar_manhattan_mc(std::vector<int> initialPosition);
+std::vector<int> find_solution_astar_misplaced_mc(std::vector<int> initialPosition);
+std::vector<std::vector<std::vector<int>>> monte_carlo_generation(int size, int number_of_configurations, int number_of_moves);
+void calculateManhattanDistance(Node* node);
+void calculateMisplacedTiles(Node* node);
 std::vector<std::vector<int>> generateGoalConfig(int size);
 Node* generateInitialNode(std::vector<int> initialPosition);
 std::vector<Node*> successors(Node* node);
