@@ -69,6 +69,7 @@ std::vector<int> find_solution_dfs_mc(std::vector<int> initialPosition)
 	System::String^ solving_str = "SOLVING";
 	System::String^ failed_str = "FAILED";
 	System::String^ success_str = "SUCCESS";
+	bool success = false;
 
 	while (true)
 	{
@@ -83,14 +84,15 @@ std::vector<int> find_solution_dfs_mc(std::vector<int> initialPosition)
 
 			labeled_states.push_back(queue.at(queue.size() - 1)->getState());
 
-			if (queue.at(0)->getState() == goalConfiguration)
-			{
-				break;
-			}
 			queue.pop_back();
 
 			for (unsigned int i = 0; i < successors_list.size(); i++)
 			{
+				if (successors_list.at(i)->getState() == goalConfiguration)
+				{
+					success = true;
+					break;
+				}
 				duplicate = false;
 				for (unsigned int j = 0; j < labeled_states.size(); j++)
 				{
@@ -100,7 +102,15 @@ std::vector<int> find_solution_dfs_mc(std::vector<int> initialPosition)
 					}
 				}
 				if (!duplicate)
-					queue.push_back(successors_list.at(i));
+				{
+					if (successors_list.at(i)->getStepsTaken() < 20)
+						queue.push_back(successors_list.at(i));
+				}
+
+			}
+			if (success)
+			{
+				break;
 			}
 		}
 	}
@@ -133,35 +143,31 @@ std::vector<int> find_solution_id_mc(std::vector<int> initialPosition)
 
 	while (true)
 	{
-		for (unsigned int i = 0; i < depth; i++)
+		for (unsigned int j = 0; j < queue.size(); j++)
 		{
-			for (unsigned int j = 0; j < queue.size(); j++)
+			successors_list = successors(queue.at(j));
+			exploredNodes++;
+			for (unsigned int n = 0; n < successors_list.size(); n++)
 			{
-				successors_list = successors(queue.at(j));
-				for (unsigned int n = 0; n < successors_list.size(); n++)
+				depth_list.push_back(successors_list.at(n));
+				if (successors_list.at(n)->getState() == goalConfiguration)
 				{
-					depth_list.push_back(successors_list.at(n));
+					success = true;
+					break;
 				}
 			}
-			queue = depth_list;
-			depth_list.clear();
-		}
-		for (unsigned int k = 0; k < queue.size(); k++)
-		{
-			exploredNodes++;
-
-			if (queue.at(k)->getState() == goalConfiguration)
+			if (success)
 			{
-				success = true;
 				break;
 			}
-
 		}
+		queue.clear();
+		queue = depth_list;
+		depth_list.clear();
 		if (success)
 		{
 			break;
 		}
-		depth++;
 	}
 
 	int explored_nodes = exploredNodes;

@@ -21,15 +21,15 @@ std::vector<Node*> successors(Node* configuration)
 		}
 		else if (blankPosition.at(1) == size - 1)
 		{
-			successors_list.push_back(moveLeft(configuration));
 			successors_list.push_back(moveDown(configuration));
+			successors_list.push_back(moveLeft(configuration));
 			//move left and down
 		}
 		else
 		{
+			successors_list.push_back(moveDown(configuration));
 			successors_list.push_back(moveLeft(configuration));
 			successors_list.push_back(moveUp(configuration));
-			successors_list.push_back(moveDown(configuration));
 			//move left, up, down
 		}
 	}
@@ -60,23 +60,23 @@ std::vector<Node*> successors(Node* configuration)
 		else
 		{
 			successors_list.push_back(moveRight(configuration));
-			successors_list.push_back(moveUp(configuration));
 			successors_list.push_back(moveDown(configuration));
+			successors_list.push_back(moveUp(configuration));
 			//move up down right
 		}
 	}
 	else if (blankPosition.at(1) == size - 1)
 	{
 		successors_list.push_back(moveRight(configuration));
-		successors_list.push_back(moveLeft(configuration));
 		successors_list.push_back(moveDown(configuration));
+		successors_list.push_back(moveLeft(configuration));
 		//move left right down
 	}
 	else
 	{
 		successors_list.push_back(moveRight(configuration));
-		successors_list.push_back(moveUp(configuration));
 		successors_list.push_back(moveDown(configuration));
+		successors_list.push_back(moveUp(configuration));
 		successors_list.push_back(moveLeft(configuration));
 		//move up down left right
 	}
@@ -261,6 +261,7 @@ std::vector<std::vector<std::vector<int>>> find_solution_dfs(std::vector<int> in
 	solver_window->Show();
 	solver_window->setSolverStatusText(solving_str);
 	clock_t begin = clock();
+	bool success = false;
 
 	while (true)
 	{
@@ -281,18 +282,17 @@ std::vector<std::vector<std::vector<int>>> find_solution_dfs(std::vector<int> in
 			solver_window->Refresh();
 
 			labeled_states.push_back(queue.at(queue.size() - 1)->getState());
-
-			if (queue.at(0)->getState() == goalConfiguration)
-			{
-				result = queue.at(queue.size() - 1);
-				solver_window->setSolverStatusText(success_str);
-				break;
-			}
 			queue.pop_back();
 
 			for (unsigned int i = 0; i < successors_list.size(); i++)
 			{
 				duplicate = false;
+				if (successors_list.at(i)->getState() == goalConfiguration)
+				{
+					success = true;
+					result = successors_list.at(i);
+					break;
+				}
 				for (unsigned int j = 0; j < labeled_states.size(); j++)
 				{
 					if (labeled_states.at(j) == successors_list.at(i)->getState())
@@ -301,8 +301,18 @@ std::vector<std::vector<std::vector<int>>> find_solution_dfs(std::vector<int> in
 					}
 				}
 				if (!duplicate)
-					queue.push_back(successors_list.at(i));
+				{
+					if (successors_list.at(i)->getStepsTaken() < 20)
+						queue.push_back(successors_list.at(i));
+				}
+					
 			}
+			if (success)
+			{
+				solver_window->setSolverStatusText(success_str);
+				break;
+			}
+
 		}
 	}
 
@@ -344,46 +354,40 @@ std::vector<std::vector<std::vector<int>>> find_solution_id(std::vector<int> ini
 	std::vector<Node*> successors_list;
 	std::vector<Node*> depth_list;
 	bool success = false;
-	int depth = 1;
 
 	while (true)
 	{
-		for (unsigned int i = 0; i < depth; i++)
+		for (unsigned int j = 0; j < queue.size(); j++)
 		{
-			for (unsigned int j = 0; j < queue.size(); j++)
+			successors_list = successors(queue.at(j));
+			exploredNodes++;
+			for (unsigned int n = 0; n < successors_list.size(); n++)
 			{
-				successors_list = successors(queue.at(j));
-				for (unsigned int n = 0; n < successors_list.size(); n++)
+				depth_list.push_back(successors_list.at(n));
+				if (successors_list.at(n)->getState() == goalConfiguration)
 				{
-					depth_list.push_back(successors_list.at(n));
+					result = successors_list.at(n);
+					solver_window->setSolverStatusText(success_str);
+					success = true;
+					break;
 				}
 			}
-			queue = depth_list;
-			depth_list.clear();
-		}
-		for (unsigned int k = 0; k < queue.size(); k++)
-		{
-			exploredNodes++;
-
+			if (success)
+			{
+				break;
+			}
 			std::string str = std::to_string(exploredNodes);
 			System::String^ str2 = gcnew System::String(str.c_str());
 			solver_window->setNodesExploreText(str2);
 			solver_window->Refresh();
-
-			if (queue.at(k)->getState() == goalConfiguration)
-			{
-				result = queue.at(k);
-				solver_window->setSolverStatusText(success_str);
-				success = true;
-				break;
-			}
-			
 		}
+		queue.clear();
+		queue = depth_list;
+		depth_list.clear();
 		if (success)
 		{
 			break;
 		}
-		depth++;
 	}
 
 	clock_t end = clock();
