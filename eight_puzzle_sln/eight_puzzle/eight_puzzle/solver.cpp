@@ -413,14 +413,14 @@ void calculateManhattanDistance(Node* node)
 	std::vector<std::vector<int>> state = node->getState();
 	int size = state.size();
 	int manhattan_distance = 0;
-	for (int i = 0; i < state.size(); i++)
+	for (int i = 0; i < size; i++)
 	{
-		for (int j = 0; j < state.size(); j++)
+		for (int j = 0; j < size; j++)
 		{
 			int number_on_state = state.at(i).at(j);
 			if (number_on_state == 0)
 				number_on_state = 9;
-			manhattan_distance += abs((int)(number_on_state / size) - (int)((3 * i + j + 1) / size)) + abs((int)(number_on_state % size) - (int)((3 * i + j + 1) % size));
+			manhattan_distance += abs((int)(number_on_state / size) - (int)((size * i + j + 1) / size)) + abs((int)(number_on_state % size) - (int)((size * i + j + 1) % size));
 		}
 	}
 	manhattan_distance += node->getStepsTaken();
@@ -430,12 +430,13 @@ void calculateManhattanDistance(Node* node)
 void calculateMisplacedTiles(Node* node)
 {
 	std::vector<std::vector<int>> state = node->getState();
+	int size = state.size();
 	int misplaced_tiles = 0;
-	for (int i = 0; i < state.size(); i++)
+	for (int i = 0; i < size; i++)
 	{
-		for (int j = 0; j < state.size(); j++)
+		for (int j = 0; j < size; j++)
 		{
-			if (state.at(i).at(j) != 3 * i + j + 1)
+			if (state.at(i).at(j) != size * i + j + 1)
 				misplaced_tiles++;
 		}
 	}
