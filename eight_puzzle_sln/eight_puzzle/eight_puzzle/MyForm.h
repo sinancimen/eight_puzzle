@@ -357,31 +357,31 @@ namespace eight_puzzle {
 		System::Void generate_Click(System::Object^  sender, System::EventArgs^  e) 
 		{
 		list_to_be_solved.clear();
-		if (initial_state_textbox->Text->Length == 0)
+		if (initial_state_textbox->Text->Length == 0) // if the initial state textbox is empty, random state will be generated
 		{
-			System::String^ size_string = this->size_textbox_input->Text;
+			System::String^ size_string = this->size_textbox_input->Text; //reading size from the textbox
 			int size_int = int::Parse(size_string);
 			int size_squared = size_int * size_int;
 			visual->changeSize(size_int);
-			for (int i = 0; i < size_squared; i++)
+			for (int i = 0; i < size_squared; i++) // a 1-D list with length size^2 is created
 			{
 				list_to_be_solved.push_back(i);
 			}
-			std::random_shuffle(std::begin(list_to_be_solved), std::end(list_to_be_solved));
+			std::random_shuffle(std::begin(list_to_be_solved), std::end(list_to_be_solved)); //then the list is randomly shuffled
 			//list_to_be_solved = { 3, 4, 6, 1, 0, 8, 7, 2, 5 };
-			show_on_grid_1d(list_to_be_solved);
+			show_on_grid_1d(list_to_be_solved); // Generated random puzzle is shown on visual
 			iteration_number = 0;
 		}
 		else
 		{
-			System::String^ str = gcnew String(initial_state_textbox->Text);
+			System::String^ str = gcnew String(initial_state_textbox->Text); // if initial state textbox is not empty
 			IntPtr ptrToNativeString = System::Runtime::InteropServices::Marshal::StringToHGlobalAnsi(str);
 			char* chrArr = static_cast<char*>(ptrToNativeString.ToPointer());
 
 			std::vector<int> stateList;
 			for (int i = 0; i < str->Length; i++)
 			{
-				stateList.push_back(int(chrArr[i]) - 48);
+				stateList.push_back(int(chrArr[i]) - 48); // string on the textbox is converted to char array first and ASCII value is converted to int
 			}
 			int size = sqrt(stateList.size());
 			visual->changeSize(size);
@@ -391,9 +391,9 @@ namespace eight_puzzle {
 		}
 	}
 
-	System::Void solve_Click(System::Object^  sender, System::EventArgs^  e) {
+	System::Void solve_Click(System::Object^  sender, System::EventArgs^  e) { // when the solve button is clicked
 
-		if (search_method_list->GetItemText(search_method_list->SelectedItem) == ("BFS"))
+		if (search_method_list->GetItemText(search_method_list->SelectedItem) == ("BFS")) 
 		{
 			result_sequence = find_solution_bfs(list_to_be_solved);
 		}
@@ -420,12 +420,12 @@ namespace eight_puzzle {
 		iterate();
 	}
 
-	void iterate()
+	void iterate() // this function is both used by Iterate button and Start button to show the solution steps
 	{
 		if (result_sequence.size() == 0)
 		{
 		}
-		else
+		else // at each iteration, first element of solution sequence is taken and removed
 		{
 			std::vector<std::vector<int>> list_to_show_2d = result_sequence.at(0);
 			std::vector<int> list_to_show_1d;
@@ -438,7 +438,7 @@ namespace eight_puzzle {
 				}
 			}
 			show_on_grid_1d(list_to_show_1d);
-			iteration_number += 1;
+			iteration_number += 1; // iteration number is displayed in GUI
 			std::string iteration_number_str = std::to_string(iteration_number);
 			System::String^ iteration_number_sstr = gcnew String(iteration_number_str.c_str());
 			iteration_number_textbox->Text = iteration_number_sstr;
@@ -446,8 +446,8 @@ namespace eight_puzzle {
 	}
 
 	System::Void timer_execution(System::Object^  sender, System::EventArgs^  e) {
-		if (executionActive)
-		{
+		if (executionActive) // A timer is placed on GUI with an interval of 1000ms (1 sec)
+		{ // at each second, if the executionActive flag is true, it will do one iteration
 			iterate();
 		}
 		else
@@ -457,14 +457,14 @@ namespace eight_puzzle {
 	}
 
 	System::Void start_click(System::Object^  sender, System::EventArgs^  e) {
-		executionActive = true;
+		executionActive = true; //setting the flag used by timer to be true
 	}
 
 	System::Void pause_click(System::Object^  sender, System::EventArgs^  e) {
-		executionActive = false;
+		executionActive = false; //when clicked on pause, flag will be false
 	}
 
-	System::Void show_on_grid_1d(std::vector<int> List)
+	System::Void show_on_grid_1d(std::vector<int> List) // function to be used to show any 1-D configuration on the visual
 	{
 		int size_squared = List.size();
 		array<System::Windows::Forms::ListViewItem^>^ DataList = gcnew array< System::Windows::Forms::ListViewItem^>(size_squared);
@@ -487,25 +487,25 @@ private: System::Void textBox1_TextChanged_1(System::Object^  sender, System::Ev
 }
 private: System::Void method_textbox_static_TextChanged(System::Object^  sender, System::EventArgs^  e) {
 }
-private: System::Void mc_run_click(System::Object^  sender, System::EventArgs^  e) {
-	System::String^ sim_number_string = this->mc_number_of_simulations_textbox->Text;
-	int number_of_simulations = int::Parse(sim_number_string);
-	System::String^ move_number_string = this->mc_number_of_moves_textbox->Text;
+private: System::Void mc_run_click(System::Object^  sender, System::EventArgs^  e) { // when Run button is clicked for Monte-Carlo simulations
+	System::String^ sim_number_string = this->mc_number_of_simulations_textbox->Text; //retrieving number of simulations
+	int number_of_simulations = int::Parse(sim_number_string); // converting from System::String^ to int
+	System::String^ move_number_string = this->mc_number_of_moves_textbox->Text; // retrieving number of moves away from goal state
 	int number_of_moves = int::Parse(move_number_string);
 	System::String^ size_string = this->size_textbox_input->Text;
 	int size_int = int::Parse(size_string);
-	std::vector<std::vector<std::vector<int>>> initialStates = monte_carlo_generation(size_int, number_of_simulations, number_of_moves);
-	std::vector<int> results;
+	std::vector<std::vector<std::vector<int>>> initialStates = monte_carlo_generation(size_int, number_of_simulations, number_of_moves); // this function creates random initial states in monte_carlo_functions.cpp
+	std::vector<int> results; //first element of result variable is number of nodes explored and the second is number of nodes stored
 	int total_explored_nodes = 0;
 	int total_memory_usage = 0;
 	int average_explored_nodes = 0;
 	int average_memory_usage = 0;
-	for (unsigned int i = 0; i < initialStates.size(); i++)
+	for (unsigned int i = 0; i < initialStates.size(); i++) // solving for each initial state
 	{
 		std::vector<int> list_to_be_solved;
 		for (int j = 0; j < size_int; j++)
 		{
-			for (int k = 0; k < size_int; k++)
+			for (int k = 0; k < size_int; k++) // converting initial states to 2-D array to solve
 			{
 				list_to_be_solved.push_back(initialStates.at(i).at(j).at(k));
 			}
@@ -530,13 +530,13 @@ private: System::Void mc_run_click(System::Object^  sender, System::EventArgs^  
 		{
 			results = find_solution_astar_misplaced_mc(list_to_be_solved);
 		}
-		total_explored_nodes += results.at(0);
+		total_explored_nodes += results.at(0); // after each solution, number of explored nodes and stored nodes are summed
 		total_memory_usage += results.at(1);
 	}
-	average_explored_nodes = total_explored_nodes / number_of_simulations;
+	average_explored_nodes = total_explored_nodes / number_of_simulations; //then these parameters are averaged
 	average_memory_usage = total_memory_usage / number_of_simulations;
 
-	MyForm3^ mc_window = gcnew MyForm3();
+	MyForm3^ mc_window = gcnew MyForm3(); //creating new instance of GUI that show the results of Monte-Carlo simulations
 
 	std::string str = std::to_string(average_explored_nodes);
 	System::String^ str2 = gcnew System::String(str.c_str());

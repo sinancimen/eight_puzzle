@@ -7,19 +7,19 @@
 
 
 class Node {
-	Node* parent;
-	std::vector< std::vector<int> > state;
-	int manhattan_distance;
-	int misplaced_tiles;
-	int blank_x;
+	Node* parent; // each node will have a parent
+	std::vector< std::vector<int> > state; // a 2-D configuration
+	int manhattan_distance; // manhattan_distance heuristic (only calculated when A* with manhattan_distance is used)
+	int misplaced_tiles; // misplaced_tiles heuristic (only calculated when A* with misplaced_tiles is used)
+	int blank_x; // position of empty tile (starts from 0)
 	int blank_y;
-	int stepsTaken = 0;
+	int stepsTaken = 0; // number of steps taken to reach this node from the initial node (automatically generated upon creating the node)
 
 public:
 	Node() {
 		
 	}
-	Node(Node* parent,
+	Node(Node* parent, // constructor that will be used
 		const std::vector< std::vector<int> >&state,
 		int manhattan_distance) {
 		this->parent = parent;
@@ -27,57 +27,57 @@ public:
 		this->manhattan_distance = manhattan_distance;
 		if (this->parent != NULL)
 		{
-			this->stepsTaken = this->parent->stepsTaken + 1;
+			this->stepsTaken = this->parent->stepsTaken + 1; // incremented parent's property by one
 		}
 	}
 
-	int get_manhattan_distance();
-	Node* get_parent()
+	Node* get_parent() //returns parent of the node (no need for setter for this property since generated at constructor)
 	{
 		return this->parent;
 	}
 	
-	std::vector<std::vector<int>> getState()
+	std::vector<std::vector<int>> getState() //returns 2-D configuration of the node
 	{
 		return this->state;
 	};
-	void setBlankPosition(int x, int y)
+	void setBlankPosition(int x, int y) //setter of blank position
 	{
 		this->blank_x = x;
 		this->blank_y = y;
 	}
-	std::vector<int> getBlankPosition()
+	std::vector<int> getBlankPosition() //getter of blank position
 	{
 		std::vector<int> pos = { this->blank_x, this->blank_y };
 		return pos;
 	}
 
-	void setManhattanDistance(int distance)
+	void setManhattanDistance(int distance) //sets the manhattan distance
 	{
 		this->manhattan_distance = distance;
 	}
 
-	void setMisplacedTiles(int misplaced)
+	void setMisplacedTiles(int misplaced) //sets the misplaced tiles
 	{
 		this->misplaced_tiles = misplaced;
 	}
 
-	int getManhattanDistance()
+	int getManhattanDistance() //getter for manhattan distance
 	{
 		return this->manhattan_distance;
 	}
 	
-	int getMisplacedTiles()
+	int getMisplacedTiles() //getter for misplaced tiles
 	{
 		return this->misplaced_tiles;
 	}
 
-	int getStepsTaken()
+	int getStepsTaken() //getter for number of steps
 	{
 		return this->stepsTaken;
 	}
 };
 
+//Definitions of functions that are used in solver.cpp and monte_carlo_functions.cpp
 std::vector<std::vector<std::vector<int>>> find_solution_bfs(std::vector<int> initialPosition);
 std::vector<std::vector<std::vector<int>>> find_solution_dfs(std::vector<int> initialPosition);
 std::vector<std::vector<std::vector<int>>> find_solution_id(std::vector<int> initialPosition);

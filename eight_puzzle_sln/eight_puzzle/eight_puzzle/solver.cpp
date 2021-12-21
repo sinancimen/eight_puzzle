@@ -5,12 +5,12 @@
 #include <functional>
 
 
-std::vector<Node*> successors(Node* configuration)
+std::vector<Node*> successors(Node* configuration) //The function that returns possible next nodes from a node
 {
-	std::vector<std::vector<int>> parentConfiguration = configuration->getState();
-	std::vector<int> blankPosition= configuration->getBlankPosition();
+	std::vector<std::vector<int>> parentConfiguration = configuration->getState(); //retrieving the state of the input node to calculate size of the grid
+	std::vector<int> blankPosition= configuration->getBlankPosition(); //function will decide on what moves it can take by using the position of blank tile
 	int size = parentConfiguration.size();
-	std::vector<Node*> successors_list;
+	std::vector<Node*> successors_list; //initializing the vector that will be returned
 	if (blankPosition.at(0) == 0)
 	{
 		if (blankPosition.at(1) == 0)
@@ -132,13 +132,13 @@ Node* moveDown(Node* configuration)
 }
 
 
-Node* generateInitialNode(std::vector<int> initialPosition)
+Node* generateInitialNode(std::vector<int> initialPosition) //this function will create a node from initial state
 {
 	int size = sqrt(initialPosition.size());
 	std::vector<std::vector<int>> initialConfiguration(size, std::vector<int>(size, 0));
 	int blank_x = 0;
-	int blank_y = 0;
-	for (int i = 0; i < size; i++)
+	int blank_y = 0; 
+	for (int i = 0; i < size; i++) //converting 1-D vector to 2-D
 	{
 		for (int j = 0; j < size; j++)
 		{
@@ -151,13 +151,13 @@ Node* generateInitialNode(std::vector<int> initialPosition)
 		}
 	}
 
-	Node* initialNode = new Node(NULL, initialConfiguration, 0);
-	initialNode->setBlankPosition(blank_x, blank_y);
+	Node* initialNode = new Node(NULL, initialConfiguration, 0); //There will be no parent of initial node
+	initialNode->setBlankPosition(blank_x, blank_y); 
 
 	return initialNode;
 }
 
-std::vector<std::vector<int>> generateGoalConfig(int size)
+std::vector<std::vector<int>> generateGoalConfig(int size) //size dependent goal configuration generator ex: 123;456;780
 {
 	std::vector<std::vector<int>> goalConfiguration(size, std::vector<int>(size, 0));
 	for (int i = 0; i < size; i++)
@@ -171,46 +171,46 @@ std::vector<std::vector<int>> generateGoalConfig(int size)
 	return goalConfiguration;
 }
 
-std::vector<std::vector<std::vector<int>>> find_solution_bfs(std::vector<int> initialPosition)
+std::vector<std::vector<std::vector<int>>> find_solution_bfs(std::vector<int> initialPosition) //Breath-First Search
 {
 	int size = sqrt(initialPosition.size());
-	Node* initialNode = generateInitialNode(initialPosition);
-	std::vector<std::vector<int>> goalConfiguration = generateGoalConfig(size);
+	Node* initialNode = generateInitialNode(initialPosition); //Generating initial node
+	std::vector<std::vector<int>> goalConfiguration = generateGoalConfig(size); //Generating goal configuration (2-D vector)
 	int exploredNodes = 0;
-	std::vector<Node*> queue;
-	queue.push_back(initialNode);
-	Node* result = NULL;
-	std::vector<std::vector<std::vector<int>>> labeled_states;
-	bool duplicate = false;
-	System::String^ solving_str = "SOLVING";
+	std::vector<Node*> queue; // the queue which will be used
+	queue.push_back(initialNode); // queue will start with the initial node
+	Node* result = NULL; //variable to store solution node
+	std::vector<std::vector<std::vector<int>>> labeled_states; //vector of labeled configurations which will be used for loop checking
+	bool duplicate = false; // dummy variable to be used for loop checking
+	System::String^ solving_str = "SOLVING"; // strings that will be shown in the Solver GUI
 	System::String^ failed_str = "FAILED";
 	System::String^ success_str = "SUCCESS";
-	eight_puzzle::MyForm2^ solver_window = gcnew eight_puzzle::MyForm2();
-	solver_window->Show();
-	solver_window->setSolverStatusText(solving_str);
-	clock_t begin = clock();
+	eight_puzzle::MyForm2^ solver_window = gcnew eight_puzzle::MyForm2(); // creating new instance of the Solver GUI
+	solver_window->Show(); 
+	solver_window->setSolverStatusText(solving_str); // solver status on GUI will start with "Solving"
+	clock_t begin = clock(); // beginning of clock to measure time required to solve
 
 	while (true)
 	{
-		std::vector<Node*> successors_list = successors(queue.at(0));
-		exploredNodes++;
+		std::vector<Node*> successors_list = successors(queue.at(0)); //at each iteration, first element of the queue will be used
+		exploredNodes++; // number of explored nodes is incremented by 1 at each iteration
 
-		std::string str = std::to_string(exploredNodes);
-		System::String^ str2 = gcnew System::String(str.c_str());
+		std::string str = std::to_string(exploredNodes); // to show the number of explored nodes, int must be converted to System::String^
+		System::String^ str2 = gcnew System::String(str.c_str()); // which is a requirement of Windows Forms
 		solver_window->setNodesExploreText(str2);
-		solver_window->Refresh();
+		solver_window->Refresh(); // refreshing the GUI to show the new number
 
-		labeled_states.push_back(queue.at(0)->getState());
+		labeled_states.push_back(queue.at(0)->getState()); // explored nodes are added to labeled_list to be used for loop checking
 
-		if (queue.at(0)->getState() == goalConfiguration)
+		if (queue.at(0)->getState() == goalConfiguration) // checking if the last explored node is the goal
 		{
 			result = queue.at(0);
-			solver_window->setSolverStatusText(success_str);
+			solver_window->setSolverStatusText(success_str); //if so, solver status on GUI will be changed to "SUCCESS"
 			break;
 		}
-		queue.erase(queue.begin());
+		queue.erase(queue.begin()); // erasing the explored node from the queue
 		
-		for (unsigned int i = 0; i < successors_list.size(); i++)
+		for (unsigned int i = 0; i < successors_list.size(); i++) // loop checking and adding successors to queue
 		{
 			duplicate = false;
 			for (unsigned int j = 0; j < labeled_states.size(); j++)
@@ -225,8 +225,8 @@ std::vector<std::vector<std::vector<int>>> find_solution_bfs(std::vector<int> in
 		}
 	}
 
-	clock_t end = clock();
-	double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+	clock_t end = clock(); // end of clock
+	double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC; //calculation of elapsed time and converting it to System::String^
 	std::string str3 = std::to_string(elapsed_secs);
 	System::String^ str4 = gcnew System::String(str3.c_str());
 	solver_window->setTimePassedText(str4);
@@ -234,7 +234,7 @@ std::vector<std::vector<std::vector<int>>> find_solution_bfs(std::vector<int> in
 	std::vector<std::vector<std::vector<int>>> resultSequence;
 	resultSequence.push_back(result->getState());
 	Node* parentNode = result->get_parent();
-	while (parentNode != NULL)
+	while (parentNode != NULL) // creating the sequence of moves from the result Node by having its parent at each iteration until parent is NULL
 	{
 		resultSequence.insert(resultSequence.begin(), parentNode->getState());
 		parentNode = parentNode->get_parent();
@@ -243,7 +243,7 @@ std::vector<std::vector<std::vector<int>>> find_solution_bfs(std::vector<int> in
 	return resultSequence;
 }
 
-std::vector<std::vector<std::vector<int>>> find_solution_dfs(std::vector<int> initialPosition)
+std::vector<std::vector<std::vector<int>>> find_solution_dfs(std::vector<int> initialPosition) //Depth-First Search
 {
 	int size = sqrt(initialPosition.size());
 	Node* initialNode = generateInitialNode(initialPosition);
@@ -273,7 +273,7 @@ std::vector<std::vector<std::vector<int>>> find_solution_dfs(std::vector<int> in
 		}
 		else
 		{
-			std::vector<Node*> successors_list = successors(queue.at(queue.size() - 1));
+			std::vector<Node*> successors_list = successors(queue.at(queue.size() - 1)); // Instead of first element of the queue, DFS will take the last element
 			exploredNodes++;
 
 			std::string str = std::to_string(exploredNodes);
@@ -282,7 +282,7 @@ std::vector<std::vector<std::vector<int>>> find_solution_dfs(std::vector<int> in
 			solver_window->Refresh();
 
 			labeled_states.push_back(queue.at(queue.size() - 1)->getState());
-			queue.pop_back();
+			queue.pop_back(); 
 
 			for (unsigned int i = 0; i < successors_list.size(); i++)
 			{
@@ -302,7 +302,7 @@ std::vector<std::vector<std::vector<int>>> find_solution_dfs(std::vector<int> in
 				}
 				if (!duplicate)
 				{
-					if (successors_list.at(i)->getStepsTaken() < 20)
+					if (successors_list.at(i)->getStepsTaken() < 20) // Depth limit is 20
 						queue.push_back(successors_list.at(i));
 				}
 					
@@ -334,7 +334,7 @@ std::vector<std::vector<std::vector<int>>> find_solution_dfs(std::vector<int> in
 	return resultSequence;
 }
 
-std::vector<std::vector<std::vector<int>>> find_solution_id(std::vector<int> initialPosition)
+std::vector<std::vector<std::vector<int>>> find_solution_id(std::vector<int> initialPosition) //Iterative Deepening Search
 {
 	int size = sqrt(initialPosition.size());
 	Node* initialNode = generateInitialNode(initialPosition);
@@ -357,7 +357,7 @@ std::vector<std::vector<std::vector<int>>> find_solution_id(std::vector<int> ini
 
 	while (true)
 	{
-		for (unsigned int j = 0; j < queue.size(); j++)
+		for (unsigned int j = 0; j < queue.size(); j++) // At each loop, successors of the current queue will be the next queue
 		{
 			successors_list = successors(queue.at(j));
 			exploredNodes++;
@@ -408,7 +408,7 @@ std::vector<std::vector<std::vector<int>>> find_solution_id(std::vector<int> ini
 	return resultSequence;
 }
 
-void calculateManhattanDistance(Node* node)
+void calculateManhattanDistance(Node* node) //Calculate manhattan distance heuristic and write it to the property of the node
 {
 	std::vector<std::vector<int>> state = node->getState();
 	int size = state.size();
@@ -419,52 +419,53 @@ void calculateManhattanDistance(Node* node)
 		{
 			int number_on_state = state.at(i).at(j);
 			if (number_on_state == 0)
-				number_on_state = 9;
+				number_on_state = size*size; // the blank tile is normally denoted as 0; however, to calculate the manhattan distance properly, it is size^2 for now
 			manhattan_distance += abs((int)(number_on_state / size) - (int)((size * i + j + 1) / size)) + abs((int)(number_on_state % size) - (int)((size * i + j + 1) % size));
 		}
 	}
-	manhattan_distance += node->getStepsTaken();
-	node->setManhattanDistance(manhattan_distance);
+	manhattan_distance += node->getStepsTaken(); // the number of steps taken to reach that node is added to the heuristic (cost)
+	node->setManhattanDistance(manhattan_distance); // set to property of the class
 }
 
-void calculateMisplacedTiles(Node* node)
+void calculateMisplacedTiles(Node* node) //Calculate misplaced tiles heuristic and write it to the property of the node
 {
 	std::vector<std::vector<int>> state = node->getState();
 	int size = state.size();
 	int misplaced_tiles = 0;
-	for (int i = 0; i < size; i++)
+	for (int i = 0; i < size; i++) //size*i+j+1 corresponds to the desired number on the tile at i,j (i and j start from 0)
 	{
 		for (int j = 0; j < size; j++)
 		{
 			if (state.at(i).at(j) != size * i + j + 1)
-				misplaced_tiles++;
+				misplaced_tiles++; // for each tile with wrong number on it, heuristic is incremented by one
 		}
 	}
-	misplaced_tiles += node->getStepsTaken();
-	node->setMisplacedTiles(misplaced_tiles);
+	misplaced_tiles += node->getStepsTaken(); // the number of steps taken to reach that node is added to the heuristic (cost)
+	node->setMisplacedTiles(misplaced_tiles); // set to property of the class
 }
 
-struct CompareManhattanDistance {
+struct CompareManhattanDistance { // comparison struct used for std::priority_queue (a default function type to arrange priority queue)
 	bool operator()(Node* const& n1, Node* const& n2)
 	{
 		return n1->getManhattanDistance() > n2->getManhattanDistance();
 	}
 };
 
-struct CompareMisplacedTiles {
+struct CompareMisplacedTiles { // comparison struct used for std::priority_queue (a default function type to arrange priority queue)
 	bool operator()(Node* const& n1, Node* const& n2)
 	{
 		return n1->getMisplacedTiles() > n2->getMisplacedTiles();
 	}
 };
 
-std::vector<std::vector<std::vector<int>>> find_solution_astar_manhattan(std::vector<int> initialPosition)
+std::vector<std::vector<std::vector<int>>> find_solution_astar_manhattan(std::vector<int> initialPosition) // A* with Manhattan distance
 {
 	int size = sqrt(initialPosition.size());
 	Node* initialNode = generateInitialNode(initialPosition);
 	std::vector<std::vector<int>> goalConfiguration = generateGoalConfig(size);
 	int exploredNodes = 0;
-	std::priority_queue<int, std::vector<Node*>, CompareManhattanDistance> queue;
+	std::priority_queue<int, std::vector<Node*>, CompareManhattanDistance> queue; // instead of simply using std::vector, std::priority queue is used
+	// the order of the priority queue will be determined by CompareManhattanDistance struct.
 	calculateManhattanDistance(initialNode);
 	queue.push(initialNode);
 	Node* result = NULL;
@@ -480,7 +481,7 @@ std::vector<std::vector<std::vector<int>>> find_solution_astar_manhattan(std::ve
 
 	while (true)
 	{
-		std::vector<Node*> successors_list = successors(queue.top());
+		std::vector<Node*> successors_list = successors(queue.top()); // will use the element with lowest heuristic value at each iteration
 		exploredNodes++;
 
 		std::string str = std::to_string(exploredNodes);
@@ -536,8 +537,9 @@ std::vector<std::vector<std::vector<int>>> find_solution_astar_manhattan(std::ve
 	return resultSequence;
 }
 
-std::vector<std::vector<std::vector<int>>> find_solution_astar_misplaced(std::vector<int> initialPosition)
+std::vector<std::vector<std::vector<int>>> find_solution_astar_misplaced(std::vector<int> initialPosition) // A* with Misplaced Tiles
 {
+	// same as A* with Manhattan distance with only changing the heuristic
 	int size = sqrt(initialPosition.size());
 	Node* initialNode = generateInitialNode(initialPosition);
 	std::vector<std::vector<int>> goalConfiguration = generateGoalConfig(size);

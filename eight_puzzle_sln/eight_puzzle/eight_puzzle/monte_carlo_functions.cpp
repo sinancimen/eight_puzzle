@@ -6,6 +6,10 @@
 #include <random>
 #include <algorithm>
 
+//functions in this file are basically the same as solver.cpp; however, these functions return different values
+//they return number of nodes explored and number of nodes stored
+//instead of the solution sequence
+
 std::vector<int> find_solution_bfs_mc(std::vector<int> initialPosition)
 {
 	int size = sqrt(initialPosition.size());
@@ -307,12 +311,12 @@ std::vector<int> find_solution_astar_misplaced_mc(std::vector<int> initialPositi
 	return result;
 }
 
-std::vector<std::vector<std::vector<int>>> monte_carlo_generation(int size, int number_of_configurations, int number_of_moves)
+std::vector<std::vector<std::vector<int>>> monte_carlo_generation(int size, int number_of_configurations, int number_of_moves)  // The function that generates random initial states
 {
-	Node* initialNode = new Node(NULL, generateGoalConfig(size), 0);
-	initialNode->setBlankPosition(size-1, size-1);
-	std::vector<std::vector<std::vector<int>>> config_list;
-	for (int k = 0; k < number_of_configurations; k++)
+	Node* initialNode = new Node(NULL, generateGoalConfig(size), 0); //Initial node is generated with the goal state, used in solver.cpp functions.
+	initialNode->setBlankPosition(size-1, size-1); 
+	std::vector<std::vector<std::vector<int>>> config_list; //the list that will be returned. contains N number of random initial states
+	for (int k = 0; k < number_of_configurations; k++) // depends on how many random states are needed to be generated
 	{
 		std::vector<Node*> queue;
 		queue.push_back(initialNode);
@@ -320,16 +324,16 @@ std::vector<std::vector<std::vector<int>>> monte_carlo_generation(int size, int 
 		bool duplicate = false;
 		int move = 0;
 
-		while (move < number_of_moves)
+		while (move < number_of_moves) // again, an input from user
 		{
 			std::vector<Node*> successors_list = successors(queue.at(queue.size() - 1));
 			labeled_states.push_back(queue.at(queue.size() - 1)->getState());
 
-			std::random_shuffle(std::begin(successors_list), std::end(successors_list));
+			std::random_shuffle(std::begin(successors_list), std::end(successors_list)); //to create randomness, successors_list is shuffled randomly
 			for (unsigned int i = 0; i < successors_list.size(); i++)
 			{
 				duplicate = false;
-				for (unsigned int j = 0; j < labeled_states.size(); j++)
+				for (unsigned int j = 0; j < labeled_states.size(); j++) //to avoid loops
 				{
 					if (labeled_states.at(j) == successors_list.at(i)->getState())
 					{
